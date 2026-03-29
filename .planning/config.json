@@ -1,0 +1,23 @@
+{
+  "mode": "yolo",
+  "granularity": "standard",
+  "parallelization": false,
+  "commit_docs": true,
+  "model_profile": "inherit",
+  "workflow": {
+    "research": false,
+    "plan_check": true,
+    "verifier": true,
+    "auto_advance": false
+  },
+  "spec_files": {
+    "context": "context.md",
+    "prompt": "prompt.md"
+  },
+  "project": {
+    "name": "baniya",
+    "package_manager": "pnpm",
+    "monorepo": true,
+    "dev_command": "pnpm dev"
+  }
+}

@@ -35,9 +35,14 @@ export const useWorkflowsStore = defineStore('workflows', () => {
   }
 
   async function save(id: string, data: any) {
-    const res = await workflowsApi.update(id, data);
-    currentWorkflow.value = res.data;
-    return res.data;
+    try {
+      const res = await workflowsApi.update(id, data);
+      currentWorkflow.value = res.data;
+      return res.data;
+    } catch (err: any) {
+      console.error('[WorkflowStore] Save failed:', err);
+      throw new Error(err.response?.data?.error || err.message || 'Failed to save workflow');
+    }
   }
 
   async function execute(id: string, payload?: any) {

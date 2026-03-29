@@ -3,3 +3,6 @@ dist/
 .env
 *.log
 .DS_Store
+
+# Ignore Windows reserved device file that breaks Git on Windows
+nul

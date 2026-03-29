@@ -5,6 +5,7 @@ import { BaniyaRouter, checkOllamaStatus, checkLMStudioStatus, listOllamaModels 
 import { AuditLogger } from '@baniya/audit-logger';
 import type { RouterConfig, ProviderStatus } from '@baniya/types';
 import { AppDataSource } from '../data-source';
+import { SettingsEntity } from '../entities/Settings';
 
 const router: Router = Router();
 const baniyaRouter = new BaniyaRouter();
@@ -13,6 +14,21 @@ let auditLogger: AuditLogger | null = null;
 function getAuditLogger(): AuditLogger {
   if (!auditLogger) auditLogger = new AuditLogger(AppDataSource);
   return auditLogger;
+}
+
+async function getSettings(): Promise<SettingsEntity | null> {
+  if (!AppDataSource.isInitialized) return null;
+  try {
+    const repo = AppDataSource.getRepository(SettingsEntity);
+    let settings = await repo.findOne({ where: {} });
+    if (!settings) {
+      settings = repo.create();
+      await repo.save(settings);
+    }
+    return settings;
+  } catch {
+    return null;
+  }
 }
 
 // GET /api/baniya/cost-summary
@@ -45,17 +61,27 @@ router.get('/audit', async (req, res) => {
 // GET /api/baniya/providers/status
 router.get('/providers/status', async (_req, res) => {
   try {
+    const settings = await getSettings();
+    const localSettings = settings ? {
+      ollamaUrl: settings.ollamaUrl,
+      ollamaEnabled: settings.ollamaEnabled,
+    } : undefined;
+
     const [ollama, lmstudio] = await Promise.all([
-      checkOllamaStatus(),
+      checkOllamaStatus(localSettings),
       checkLMStudioStatus(),
     ]);
 
+    const openaiKey = settings?.openaiApiKey || process.env.OPENAI_API_KEY;
+    const anthropicKey = settings?.anthropicApiKey || process.env.ANTHROPIC_API_KEY;
+    const googleKey = settings?.googleApiKey || process.env.GOOGLE_API_KEY;
+
     const status: ProviderStatus = {
-      ollama,
+      ollama: settings?.ollamaEnabled ? ollama : false,
       lmstudio,
-      openai: !!process.env.OPENAI_API_KEY,
-      anthropic: !!process.env.ANTHROPIC_API_KEY,
-      gemini: !!process.env.GOOGLE_API_KEY,
+      openai: !!openaiKey,
+      anthropic: !!anthropicKey,
+      gemini: !!googleKey,
     };
 
     res.json(status);
@@ -79,7 +105,21 @@ router.post('/classify', (req, res) => {
 router.post('/route', async (req, res) => {
   try {
     const { payload, prompt, config } = req.body;
-    const result = await baniyaRouter.route(payload, prompt, config as RouterConfig);
+    const settings = await getSettings();
+    const routerSettings = settings ? {
+      local: {
+        ollamaUrl: settings.ollamaUrl,
+        ollamaEnabled: settings.ollamaEnabled,
+        defaultLocalModel: settings.defaultLocalModel,
+      },
+      cloud: {
+        openaiApiKey: settings.openaiApiKey,
+        anthropicApiKey: settings.anthropicApiKey,
+        googleApiKey: settings.googleApiKey,
+        defaultCloudModel: settings.defaultCloudModel,
+      },
+    } : undefined;
+    const result = await baniyaRouter.route(payload, prompt, config as RouterConfig, routerSettings);
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err instanceof Error ? err.message : 'Routing failed' });
@@ -89,7 +129,12 @@ router.post('/route', async (req, res) => {
 // GET /api/baniya/models/local
 router.get('/models/local', async (_req, res) => {
   try {
-    const models = await listOllamaModels();
+    const settings = await getSettings();
+    const localSettings = settings ? {
+      ollamaUrl: settings.ollamaUrl,
+      ollamaEnabled: settings.ollamaEnabled,
+    } : undefined;
+    const models = await listOllamaModels(localSettings);
     res.json({ models });
   } catch (err) {
     res.json({ models: [] });

@@ -11,6 +11,9 @@ dotenv.config();
 export const AppDataSource = new DataSource({
   type: 'postgres',
   url: process.env.DATABASE_URL || 'postgresql://baniya:baniya@localhost:5432/baniya',
+  ssl: process.env.DATABASE_URL?.includes('neon.tech')
+    ? { rejectUnauthorized: false }
+    : false,
   synchronize: true, // auto-sync in dev
   logging: false,
   entities: [UserEntity, WorkflowEntity, ExecutionEntity, AuditLog],

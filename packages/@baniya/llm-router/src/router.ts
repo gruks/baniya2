@@ -1,17 +1,21 @@
 import type { LLMResponse, ClassificationResult, RoutingTarget, RouterConfig } from '@baniya/types';
 import { classify } from '@baniya/data-classifier';
 import { estimateCost } from './cost-estimator';
-import { callLocal } from './providers/local';
-import { callCloud } from './providers/cloud';
+import { callLocal, type LocalSettings } from './providers/local';
+import { callCloud, type CloudSettings } from './providers/cloud';
 import { callHybrid } from './providers/hybrid';
 import { HardBlockError } from './errors';
 
+export interface RouterSettings {
+  local?: LocalSettings;
+  cloud?: CloudSettings;
+}
+
 export class BaniyaRouter {
-  async route(payload: unknown, prompt: string, config: RouterConfig): Promise<LLMResponse> {
+  async route(payload: unknown, prompt: string, config: RouterConfig, settings?: RouterSettings): Promise<LLMResponse> {
     const classification = classify(payload);
     const target = this.resolveTarget(classification, config);
 
-    // Hard block: critical data cannot go to cloud even if overridden
     if (classification.level === 'critical' && target === 'cloud') {
       throw new HardBlockError('Critical data cannot be routed to cloud. Set BANIYA_BLOCK_CLOUD_FOR=critical.');
     }
@@ -20,11 +24,11 @@ export class BaniyaRouter {
     let response: LLMResponse;
 
     if (target === 'local') {
-      response = await callLocal(prompt, config);
+      response = await callLocal(prompt, config, settings?.local);
     } else if (target === 'hybrid') {
       response = await callHybrid(payload, prompt, config);
     } else {
-      response = await callCloud(prompt, config);
+      response = await callCloud(prompt, config, settings?.cloud);
     }
 
     response.latencyMs = Date.now() - start;
