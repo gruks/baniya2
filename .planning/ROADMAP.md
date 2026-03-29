@@ -11,7 +11,12 @@ Plans:
 
 ## Phase 2: Intelligence
 ### Goal: Implement data sensitivity classification and LLM routing capabilities
-### Plans: 4 plans
+### Plans: 3 plans
+
+Plans:
+- [x] 02-intelligence-01-PLAN.md — Set up data classifier package with India PII patterns and classifier function
+- [x] 02-intelligence-02-PLAN.md — Set up LLM router package with provider adapters, sanitizer, cost estimator, and routing logic
+- [x] 02-intelligence-03-PLAN.md — Write unit tests for the data classifier package
 
 ## Phase 3: Engine
 ### Goal: Build workflow execution engine with DAG processing and node handlers
