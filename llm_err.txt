@@ -1,0 +1,8 @@
+﻿
+> @baniya/llm-router@0.1.0 build E:\Projects\baniya2\packages\@baniya\llm-router
+> tsc
+
+src/providers/hybrid.ts(1,10): error TS2305: Module '"crypto"' has no exported member 'v4'.
+E:\Projects\baniya2\packages\@baniya\llm-router:
+ΓÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILΓÇë @baniya/llm-router@0.1.0 build: `tsc`
+Exit status 2

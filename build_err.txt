@@ -1,0 +1,16 @@
+﻿
+> @baniya/editor@0.1.0 build E:\Projects\baniya2\apps\editor
+> vue-tsc --noEmit && vite build
+
+src/views/BaniyaDashboard.vue(52,104): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/views/WorkflowEditor.vue(42,14): error TS2322: Type '{ custom: Raw<DefineComponent<__VLS_Props, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, ... 9 more ..., any>>; }' is not assignable to type 'NodeTypesObject'.
+  Type '{ custom: Raw<DefineComponent<__VLS_Props, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, ... 9 more ..., any>>; }' is not assignable to type 'Record<string, NodeComponent>'.
+    Property 'custom' is incompatible with index signature.
+      Type 'Raw<DefineComponent<__VLS_Props, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, ... 9 more ..., any>>' is not assignable to type 'NodeComponent'.
+        Type 'Raw<DefineComponent<__VLS_Props, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, ... 9 more ..., any>>' is not assignable to type 'ComponentPublicInstanceConstructor<NodeProps<any, object, string>, any, any, any, ComputedOptions, MethodOptions>'.
+          Type 'CreateComponentPublicInstanceWithMixins<ToResolvedProps<__VLS_Props, {}>, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ... 18 more ..., {}>' is missing the following properties from type 'NodeProps<any, object, string>': id, type, selected, connectable, and 6 more.
+src/views/WorkflowEditor.vue(47,14): error TS2322: Type '(_: any, node: any) => void' is not assignable to type '(nodeMouseEvent: NodeMouseEvent) => any'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
+E:\Projects\baniya2\apps\editor:
+ΓÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILΓÇë @baniya/editor@0.1.0 build: `vue-tsc --noEmit && vite build`
+Exit status 2

@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: baniya
+      POSTGRES_PASSWORD: baniya
+      POSTGRES_DB: baniya
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://baniya:baniya@postgres:5432/baniya
+    env_file: apps/server/.env
+    depends_on:
+      - postgres
+
+  editor:
+    build:
+      context: .
+      dockerfile: apps/editor/Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - server
+
+volumes:
+  postgres_data:

@@ -1,0 +1,22 @@
+{
+  "name": "@baniya/workflow-engine",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo 'No tests yet'"
+  },
+  "dependencies": {
+    "@baniya/audit-logger": "workspace:*",
+    "@baniya/data-classifier": "workspace:*",
+    "@baniya/llm-router": "workspace:*",
+    "@baniya/types": "workspace:*",
+    "eventemitter3": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.4.0"
+  }
+}

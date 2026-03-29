@@ -1,0 +1,14 @@
+{
+  "name": "baniya",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter @baniya/server dev\" \"pnpm --filter @baniya/editor dev\"",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "db:migrate": "pnpm --filter @baniya/server migration:run"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0",
+    "typescript": "^5.4.0"
+  }
+}

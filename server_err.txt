@@ -1,0 +1,14 @@
+﻿
+> @baniya/server@0.1.0 build E:\Projects\baniya2\apps\server
+> tsc
+
+src/routes/auth.ts(8,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@4.19.8/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+src/routes/baniya.ts(9,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@4.19.8/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+src/routes/executions.ts(5,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@4.19.8/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+src/routes/webhooks.ts(8,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@4.19.8/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+src/routes/workflows.ts(11,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@4.19.8/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+src/seed.ts(2,31): error TS2307: Cannot find module '../data-source' or its corresponding type declarations.
+src/seed.ts(3,32): error TS2307: Cannot find module '../entities/Workflow' or its corresponding type declarations.
+E:\Projects\baniya2\apps\server:
+ΓÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILΓÇë @baniya/server@0.1.0 build: `tsc`
+Exit status 1

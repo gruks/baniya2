@@ -1,0 +1,26 @@
+﻿
+> @baniya/workflow-engine@0.1.0 build E:\Projects\baniya2\packages\@baniya\workflow-engine
+> tsc
+
+src/engine.ts(1,30): error TS2307: Cannot find module 'events' or its corresponding type declarations.
+src/engine.ts(50,10): error TS2339: Property 'emit' does not exist on type 'WorkflowEngine'.
+src/engine.ts(71,14): error TS2339: Property 'emit' does not exist on type 'WorkflowEngine'.
+src/engine.ts(82,41): error TS2339: Property 'emit' does not exist on type 'WorkflowEngine'.
+src/engine.ts(89,38): error TS2345: Argument of type 'NodeHandlerOutput' is not assignable to parameter of type 'NodeHandlerOutput & Record<string, unknown>'.
+  Type 'NodeHandlerOutput' is not assignable to type 'Record<string, unknown>'.
+    Index signature for type 'string' is missing in type 'NodeHandlerOutput'.
+src/engine.ts(116,16): error TS2339: Property 'emit' does not exist on type 'WorkflowEngine'.
+src/engine.ts(133,16): error TS2339: Property 'emit' does not exist on type 'WorkflowEngine'.
+src/engine.ts(155,10): error TS2339: Property 'emit' does not exist on type 'WorkflowEngine'.
+src/handlers.ts(83,9): error TS2322: Type '(input: unknown) => Promise<{ public: { data: unknown; level: SensitivityLevel; detectedPatterns: string[]; confidence: number; routingRecommendation: RoutingTarget; }; private?: undefined; } | { ...; }>' is not assignable to type '(input: unknown, config: Record<string, unknown>, context: ExecutionContext) => Promise<NodeHandlerOutput>'.
+  Type 'Promise<{ public: { data: unknown; level: SensitivityLevel; detectedPatterns: string[]; confidence: number; routingRecommendation: RoutingTarget; }; private?: undefined; } | { ...; }>' is not assignable to type 'Promise<NodeHandlerOutput>'.
+    Type '{ public: { data: unknown; level: SensitivityLevel; detectedPatterns: string[]; confidence: number; routingRecommendation: RoutingTarget; }; private?: undefined; } | { ...; }' is not assignable to type 'NodeHandlerOutput'.
+      Type '{ public: { data: unknown; level: SensitivityLevel; detectedPatterns: string[]; confidence: number; routingRecommendation: RoutingTarget; }; private?: undefined; }' has no properties in common with type 'NodeHandlerOutput'.
+src/handlers.ts(97,25): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+src/handlers.ts(188,9): error TS2322: Type '(input: unknown, config: Record<string, unknown>) => Promise<{ [x: string]: unknown; default?: undefined; } | { default: unknown; }>' is not assignable to type '(input: unknown, config: Record<string, unknown>, context: ExecutionContext) => Promise<NodeHandlerOutput>'.
+  Type 'Promise<{ [x: string]: unknown; default?: undefined; } | { default: unknown; }>' is not assignable to type 'Promise<NodeHandlerOutput>'.
+    Type '{ [x: string]: unknown; default?: undefined; } | { default: unknown; }' is not assignable to type 'NodeHandlerOutput'.
+      Type '{ [x: string]: unknown; default?: undefined; }' has no properties in common with type 'NodeHandlerOutput'.
+E:\Projects\baniya2\packages\@baniya\workflow-engine:
+ΓÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILΓÇë @baniya/workflow-engine@0.1.0 build: `tsc`
+Exit status 2
