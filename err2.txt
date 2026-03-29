@@ -1,0 +1,133 @@
+﻿
+> @baniya/editor@0.1.0 build E:\Projects\baniya2\apps\editor
+> vue-tsc --noEmit && vite build
+
+node.exe : [33mThe 
+CJS build of Vite's 
+Node API is 
+deprecated. See https:/
+/vite.dev/guide/trouble
+shooting.html#vite-cjs-
+node-api-deprecated 
+for more details.[39m
+At C:\Users\HP\AppData\
+Roaming\npm\pnpm.ps1:24
+ char:5
++     & "node$exe"  "$b
+asedir/node_modules/pnp
+m/bin/pnpm.cjs" $args
++     ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: ([33mThe CJS    
+ bu...e details.[3    
+9m:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+[32mΓ£ô[39m 7 modules transformed.
+[31mx[39m Build 
+failed in 913ms
+[31merror during 
+build:
+[31m[vite:vue] 
+[plugin vite:vue] src/v
+iews/BaniyaDashboard.vu
+e (237:9): Invalid end 
+tag.[31m
+file: [36mE:/Projects/
+baniya2/apps/editor/src
+/views/BaniyaDashboard.
+vue:237:9[31m
+SyntaxError: [plugin 
+vite:vue] src/views/Ban
+iyaDashboard.vue 
+(237:9): Invalid end 
+tag.
+    at 
+createCompilerError (E:
+\Projects\baniya2\node_
+modules\.pnpm\@vue+comp
+iler-core@3.5.31\node_m
+odules\@vue\compiler-co
+re\dist\compiler-core.c
+js.prod.js:1374:17)
+    at emitError (E:\Pr
+ojects\baniya2\node_mod
+ules\.pnpm\@vue+compile
+r-core@3.5.31\node_modu
+les\@vue\compiler-core\
+dist\compiler-core.cjs.
+prod.js:2980:5)
+    at 
+Object.onclosetag (E:\P
+rojects\baniya2\node_mo
+dules\.pnpm\@vue+compil
+er-core@3.5.31\node_mod
+ules\@vue\compiler-core
+\dist\compiler-core.cjs
+.prod.js:2387:9)
+    at Tokenizer.stateI
+nClosingTagName (E:\Pro
+jects\baniya2\node_modu
+les\.pnpm\@vue+compiler
+-core@3.5.31\node_modul
+es\@vue\compiler-core\d
+ist\compiler-core.cjs.p
+rod.js:799:16)
+    at Tokenizer.parse 
+(E:\Projects\baniya2\no
+de_modules\.pnpm\@vue+c
+ompiler-core@3.5.31\nod
+e_modules\@vue\compiler
+-core\dist\compiler-cor
+e.cjs.prod.js:1157:16)
+    at 
+Object.baseParse (E:\Pr
+ojects\baniya2\node_mod
+ules\.pnpm\@vue+compile
+r-core@3.5.31\node_modu
+les\@vue\compiler-core\
+dist\compiler-core.cjs.
+prod.js:3012:13)
+    at Object.parse (E:
+\Projects\baniya2\node_
+modules\.pnpm\@vue+comp
+iler-dom@3.5.31\node_mo
+dules\@vue\compiler-dom
+\dist\compiler-dom.cjs.
+prod.js:665:23)
+    at Object.parse$1 
+[as parse] (E:\Projects
+\baniya2\node_modules\.
+pnpm\@vue+compiler-sfc@
+3.5.31\node_modules\@vu
+e\compiler-sfc\dist\com
+piler-sfc.cjs.js:1824:2
+4)
+    at 
+createDescriptor (E:\Pr
+ojects\baniya2\node_mod
+ules\.pnpm\@vitejs+plug
+in-vue@5.2.4_vi_7f0d164
+d1bcaeeb5875429cb17de7d
+ba\node_modules\@vitejs
+\plugin-vue\dist\index.
+cjs:84:43)
+    at transformMain (E
+:\Projects\baniya2\node
+_modules\.pnpm\@vitejs+
+plugin-vue@5.2.4_vi_7f0
+d164d1bcaeeb5875429cb17
+de7dba\node_modules\@vi
+tejs\plugin-vue\dist\in
+dex.cjs:2434:34)[39m
+E:\Projects\baniya2\apps\editor:
+ΓÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILΓÇë @baniya/editor@0.1.0 build: `vue-tsc --noEmit && vite build`
+Exit status 1

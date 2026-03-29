@@ -1,13 +1,14 @@
 <template>
-  <div :class="{ dark: isDark }">
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useAuthStore } from './stores/auth';
+import { onMounted } from 'vue';
 
-const auth = useAuthStore();
-const isDark = computed(() => localStorage.getItem('baniya-dark') === 'true');
+// Apply dark mode on startup from persisted preference
+onMounted(() => {
+  if (localStorage.getItem('baniya-dark') === 'true') {
+    document.documentElement.classList.add('dark');
+  }
+});
 </script>

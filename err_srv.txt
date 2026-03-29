@@ -1,0 +1,8 @@
+﻿
+> @baniya/server@0.1.0 build E:\Projects\baniya2\apps\server
+> tsc
+
+src/routes/filesystem.ts(9,14): error TS2742: The inferred type of 'filesystemRouter' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@4.19.8/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+E:\Projects\baniya2\apps\server:
+ΓÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILΓÇë @baniya/server@0.1.0 build: `tsc`
+Exit status 1

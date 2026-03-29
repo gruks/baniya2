@@ -13,6 +13,7 @@ import { executionRouter } from './routes/executions';
 import { baniyaRouter } from './routes/baniya';
 import { settingsRouter } from './routes/settings';
 import { webhookRouter } from './routes/webhooks';
+import { filesystemRouter } from './routes/filesystem';
 import { setupWebSocket } from './websocket';
 import { seedDemoWorkflow } from './seed';
 
@@ -39,6 +40,7 @@ async function main() {
   app.use('/api/executions', jwtMiddleware, executionRouter);
   app.use('/api/baniya', jwtMiddleware, baniyaRouter);
   app.use('/api/settings', jwtMiddleware, settingsRouter);
+  app.use('/api/fs', jwtMiddleware, filesystemRouter);
 
   // Webhook routes (no auth)
   app.use('/webhooks', webhookRouter);

@@ -7,6 +7,8 @@ export const baniyaApi = {
     client.get('/api/baniya/audit', { params }),
   providerStatus: () => client.get('/api/baniya/providers/status'),
   classify: (payload: any) => client.post('/api/baniya/classify', { payload }),
+  estimateCost: (payload: any, sensitivity: string, workflow?: any, executionsPerDay?: number) =>
+    client.post('/api/baniya/estimate-cost', { payload, sensitivity, workflow, executionsPerDay }),
   route: (payload: any, prompt: string, config: any) =>
     client.post('/api/baniya/route', { payload, prompt, config }),
   localModels: () => client.get('/api/baniya/models/local'),

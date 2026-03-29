@@ -1,12 +1,20 @@
 import { Router } from 'express';
+import { z } from 'zod';
 import { AppDataSource } from '../data-source';
 import { ExecutionEntity } from '../entities/Execution';
+import { validate } from '../middleware/validate';
+
+const paginationSchema = z.object({
+  workflowId: z.string().optional(),
+  page: z.coerce.number().min(1).optional(),
+  limit: z.coerce.number().min(1).max(100).optional(),
+});
 
 const router: Router = Router();
 const executionRepo = () => AppDataSource.getRepository(ExecutionEntity);
 
 // GET /api/executions
-router.get('/', async (req, res) => {
+router.get('/', validate(paginationSchema, 'query'), async (req, res) => {
   try {
     const { workflowId, page = '1', limit = '20' } = req.query as Record<string, string>;
     const qb = executionRepo().createQueryBuilder('e')

@@ -1,5 +1,6 @@
-import { ClassificationResult, SensitivityLevel, RoutingTarget } from '@baniya/types';
+import { ClassificationResult, SensitivityLevel, RoutingTarget, Workflow } from '@baniya/types';
 import { PATTERNS, SENSITIVE_KEYS } from './patterns/india-pii';
+import { estimateCost } from './cost-estimator';
 
 const LEVEL_ORDER: SensitivityLevel[] = ['public', 'internal', 'private', 'critical'];
 
@@ -62,7 +63,11 @@ function scanObject(obj: Record<string, unknown>, found: Set<string>): Sensitivi
   return level;
 }
 
-export function classify(payload: unknown): ClassificationResult {
+export function classify(
+  payload: unknown,
+  workflow?: Workflow,
+  executionsPerDay?: number
+): ClassificationResult {
   const found = new Set<string>();
   const level = typeof payload === 'object' && payload !== null
     ? (Array.isArray(payload) ? scanValue(payload, found) : scanObject(payload as Record<string, unknown>, found))
@@ -76,5 +81,6 @@ export function classify(payload: unknown): ClassificationResult {
     detectedPatterns: patterns,
     confidence,
     routingRecommendation: ROUTING_MAP[level],
+    costEstimate: estimateCost(payload, level, workflow, executionsPerDay),
   };
 }

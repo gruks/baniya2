@@ -91,6 +91,8 @@ export const NODE_REGISTRY: NodeMeta[] = [
     configSchema: [
       { key: 'prompt', label: 'Prompt', type: 'textarea', required: true, placeholder: 'Your prompt here. Use {{ input.field }} for data' },
       { key: 'systemPrompt', label: 'System Prompt', type: 'textarea', required: false },
+      { key: 'apiProvider', label: 'API Provider', type: 'select', options: [{ label: 'Auto (env keys)', value: 'auto' }, { label: 'OpenAI', value: 'openai' }, { label: 'Anthropic', value: 'anthropic' }, { label: 'Google Gemini', value: 'gemini' }], default: 'auto' },
+      { key: 'apiKey', label: 'API Key', type: 'password', required: false, placeholder: 'sk-... (overrides env variable)' },
       { key: 'forceRoute', label: 'Force Route', type: 'select', options: [{ label: 'Auto', value: 'auto' }, { label: 'Local', value: 'local' }, { label: 'Hybrid', value: 'hybrid' }, { label: 'Cloud', value: 'cloud' }], default: 'auto' },
       { key: 'preferredLocalModel', label: 'Preferred Local Model', type: 'text', default: 'llama3.2' },
       { key: 'preferredCloudModel', label: 'Preferred Cloud Model', type: 'select', options: [{ label: 'GPT-4o', value: 'gpt-4o' }, { label: 'GPT-4o Mini', value: 'gpt-4o-mini' }, { label: 'Claude Sonnet', value: 'claude-sonnet-4-6' }, { label: 'Claude Haiku', value: 'claude-haiku-4-5' }, { label: 'Gemini Flash', value: 'gemini-1.5-flash' }, { label: 'Gemini Pro', value: 'gemini-1.5-pro' }], default: 'gpt-4o-mini' },
@@ -356,6 +358,104 @@ export const NODE_REGISTRY: NodeMeta[] = [
     ],
   },
 
+  // ─── Storage Nodes ──────────────────────────────────────
+  {
+    type: 'storage.read',
+    label: 'Read File',
+    description: 'Read a file from the local filesystem',
+    category: 'storage',
+    color: '#0EA5E9',
+    icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M16 13H8 M16 17H8 M10 9H8',
+    handles: {
+      inputs: [{ id: 'in', label: 'Input', type: 'target' }],
+      outputs: [
+        { id: 'main', label: 'Content', type: 'source' },
+        { id: 'error', label: 'Error', type: 'source' },
+      ],
+    },
+    configSchema: [
+      { key: 'path', label: 'File Path', type: 'text', required: true, placeholder: 'data/output.txt', description: 'Relative path from storage base dir (e.g. folder/file.txt). Absolute paths like C:/ or D:/ are forbidden.' },
+      { key: 'encoding', label: 'Encoding', type: 'select', options: [{ label: 'UTF-8 (text)', value: 'utf8' }, { label: 'Base64 (binary)', value: 'base64' }], default: 'utf8' },
+    ],
+  },
+  {
+    type: 'storage.write',
+    label: 'Write File',
+    description: 'Write or overwrite a file on the local filesystem',
+    category: 'storage',
+    color: '#0EA5E9',
+    icon: 'M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z',
+    handles: {
+      inputs: [{ id: 'in', label: 'Input', type: 'target' }],
+      outputs: [
+        { id: 'main', label: 'Result', type: 'source' },
+        { id: 'error', label: 'Error', type: 'source' },
+      ],
+    },
+    configSchema: [
+      { key: 'path', label: 'File Path', type: 'text', required: true, placeholder: 'data/output.txt', description: 'Relative path from storage base dir. Absolute paths are forbidden. Use {{ input.path }} for dynamic paths.' },
+      { key: 'content', label: 'Content', type: 'textarea', placeholder: '{{ input.text }}', description: 'Content to write. Supports {{ input.field }} templates.' },
+      { key: 'append', label: 'Mode', type: 'select', options: [{ label: 'Overwrite', value: 'overwrite' }, { label: 'Append', value: 'append' }], default: 'overwrite' },
+      { key: 'createDirs', label: 'Create Directories', type: 'select', options: [{ label: 'Yes', value: 'true' }, { label: 'No', value: 'false' }], default: 'true' },
+    ],
+  },
+  {
+    type: 'storage.list',
+    label: 'List Directory',
+    description: 'List files and folders in a directory',
+    category: 'storage',
+    color: '#0EA5E9',
+    icon: 'M3 3h18v4H3zM3 10h18v4H3zM3 17h18v4H3z',
+    handles: {
+      inputs: [{ id: 'in', label: 'Input', type: 'target' }],
+      outputs: [
+        { id: 'main', label: 'Files', type: 'source' },
+        { id: 'error', label: 'Error', type: 'source' },
+      ],
+    },
+    configSchema: [
+      { key: 'path', label: 'Directory Path', type: 'text', required: true, placeholder: 'data/', description: 'Relative path from storage base dir. Absolute paths are forbidden.' },
+      { key: 'recursive', label: 'Recursive', type: 'select', options: [{ label: 'No', value: 'false' }, { label: 'Yes', value: 'true' }], default: 'false' },
+      { key: 'filter', label: 'Filter (glob)', type: 'text', placeholder: '*.txt', description: 'Optional glob pattern to filter results.' },
+    ],
+  },
+  {
+    type: 'storage.delete',
+    label: 'Delete File',
+    description: 'Delete a file from the local filesystem',
+    category: 'storage',
+    color: '#0EA5E9',
+    icon: 'M3 6h18M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2',
+    handles: {
+      inputs: [{ id: 'in', label: 'Input', type: 'target' }],
+      outputs: [
+        { id: 'main', label: 'Result', type: 'source' },
+        { id: 'error', label: 'Error', type: 'source' },
+      ],
+    },
+    configSchema: [
+      { key: 'path', label: 'File Path', type: 'text', required: true, placeholder: 'data/old.txt', description: 'Relative path from storage base dir. Absolute paths are forbidden.' },
+    ],
+  },
+  {
+    type: 'storage.mkdir',
+    label: 'Make Directory',
+    description: 'Create a directory (and any missing parents)',
+    category: 'storage',
+    color: '#0EA5E9',
+    icon: 'M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z',
+    handles: {
+      inputs: [{ id: 'in', label: 'Input', type: 'target' }],
+      outputs: [
+        { id: 'main', label: 'Result', type: 'source' },
+        { id: 'error', label: 'Error', type: 'source' },
+      ],
+    },
+    configSchema: [
+      { key: 'path', label: 'Directory Path', type: 'text', required: true, placeholder: 'data/reports/2024', description: 'Relative path from storage base dir. Absolute paths are forbidden.' },
+    ],
+  },
+
   // ─── Output Nodes ───────────────────────────────────────
   {
     type: 'output.response',
@@ -388,6 +488,105 @@ export const NODE_REGISTRY: NodeMeta[] = [
     ],
   },
 ];
+
+// ─── Folder Nodes (local drive, unrestricted) ───────────────────
+NODE_REGISTRY.push(
+  {
+    type: 'folder.connect',
+    label: 'Folder',
+    description: 'Connect to any local folder. Outputs file listing for downstream AI nodes.',
+    category: 'storage',
+    color: '#EA580C',
+    icon: 'M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z',
+    handles: {
+      inputs: [],
+      outputs: [{ id: 'main', label: 'Files', type: 'source' }],
+    },
+    configSchema: [
+      { key: 'folderPath', label: 'Folder Path', type: 'text', required: true, placeholder: 'C:\\Projects\\myapp  or  /home/user/project', description: 'Absolute path to the local folder.' },
+      { key: 'recursive', label: 'Recursive', type: 'select', options: [{ label: 'No', value: 'false' }, { label: 'Yes', value: 'true' }], default: 'false' },
+      { key: 'filter', label: 'Filter (glob)', type: 'text', placeholder: '*.ts', description: 'Optional glob to filter files, e.g. *.md' },
+    ],
+  },
+  {
+    type: 'folder.list',
+    label: 'Folder List',
+    description: 'List a sub-directory inside a connected folder.',
+    category: 'storage',
+    color: '#EA580C',
+    icon: 'M3 3h18v4H3zM3 10h18v4H3zM3 17h18v4H3z',
+    handles: {
+      inputs: [{ id: 'in', label: 'Folder', type: 'target' }],
+      outputs: [{ id: 'main', label: 'Files', type: 'source' }],
+    },
+    configSchema: [
+      { key: 'folderPath', label: 'Folder Path (override)', type: 'text', placeholder: 'Leave blank to use upstream folderPath' },
+      { key: 'subPath', label: 'Sub-path', type: 'text', placeholder: 'src/components' },
+      { key: 'recursive', label: 'Recursive', type: 'select', options: [{ label: 'No', value: 'false' }, { label: 'Yes', value: 'true' }], default: 'false' },
+    ],
+  },
+  {
+    type: 'folder.read',
+    label: 'Folder Read',
+    description: 'Read a file from the connected folder and pass content to AI.',
+    category: 'storage',
+    color: '#EA580C',
+    icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M16 13H8 M16 17H8 M10 9H8',
+    handles: {
+      inputs: [{ id: 'in', label: 'Input', type: 'target' }],
+      outputs: [
+        { id: 'main', label: 'Content', type: 'source' },
+        { id: 'error', label: 'Error', type: 'source' },
+      ],
+    },
+    configSchema: [
+      { key: 'folderPath', label: 'Folder Path (override)', type: 'text', placeholder: 'Leave blank to use upstream folderPath' },
+      { key: 'filePath', label: 'File Path', type: 'text', required: true, placeholder: 'src/index.ts  or  {{ input.path }}', description: 'Relative path inside the folder. Supports {{ input.path }} from upstream.' },
+    ],
+  },
+  {
+    type: 'folder.write',
+    label: 'Folder Write',
+    description: 'Write AI output back to a file in the connected folder.',
+    category: 'storage',
+    color: '#EA580C',
+    icon: 'M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z',
+    handles: {
+      inputs: [{ id: 'in', label: 'Input', type: 'target' }],
+      outputs: [
+        { id: 'main', label: 'Result', type: 'source' },
+        { id: 'error', label: 'Error', type: 'source' },
+      ],
+    },
+    configSchema: [
+      { key: 'folderPath', label: 'Folder Path (override)', type: 'text', placeholder: 'Leave blank to use upstream folderPath' },
+      { key: 'filePath', label: 'File Path', type: 'text', required: true, placeholder: 'output/result.md  or  {{ input.filePath }}' },
+      { key: 'content', label: 'Content', type: 'textarea', placeholder: '{{ input.text }}', description: 'Use {{ input.text }} to write AI output.' },
+      { key: 'mode', label: 'Mode', type: 'select', options: [{ label: 'Overwrite', value: 'overwrite' }, { label: 'Append', value: 'append' }], default: 'overwrite' },
+    ],
+  },
+  {
+    type: 'folder.patch',
+    label: 'Folder Patch',
+    description: 'Apply a string replacement to a file (AI-driven code edits).',
+    category: 'storage',
+    color: '#EA580C',
+    icon: 'M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z',
+    handles: {
+      inputs: [{ id: 'in', label: 'Input', type: 'target' }],
+      outputs: [
+        { id: 'main', label: 'Result', type: 'source' },
+        { id: 'error', label: 'Error', type: 'source' },
+      ],
+    },
+    configSchema: [
+      { key: 'folderPath', label: 'Folder Path (override)', type: 'text', placeholder: 'Leave blank to use upstream folderPath' },
+      { key: 'filePath', label: 'File Path', type: 'text', required: true, placeholder: 'src/index.ts' },
+      { key: 'oldStr', label: 'Old String', type: 'textarea', required: true, placeholder: 'Exact text to replace. Supports {{ input.oldStr }}.' },
+      { key: 'newStr', label: 'New String', type: 'textarea', required: true, placeholder: 'Replacement text. Supports {{ input.newStr }}.' },
+    ],
+  },
+);
 
 export function getNodeMeta(type: string): NodeMeta | undefined {
   return NODE_REGISTRY.find(n => n.type === type);

@@ -24,7 +24,17 @@ export type NodeType =
   | 'data.filter'
   | 'data.aggregate'
   | 'output.response'
-  | 'output.log';
+  | 'output.log'
+  | 'storage.read'
+  | 'storage.write'
+  | 'storage.list'
+  | 'storage.delete'
+  | 'storage.mkdir'
+  | 'folder.connect'
+  | 'folder.list'
+  | 'folder.read'
+  | 'folder.write'
+  | 'folder.patch';
 
 // ─── Core Structures ──────────────────────────────────────────────
 export interface Position {
@@ -66,6 +76,47 @@ export interface ClassificationResult {
   detectedPatterns: string[];
   confidence: number;
   routingRecommendation: RoutingTarget;
+  costEstimate?: ProjectCostEstimate;
+}
+
+// ─── Project Cost Estimation ──────────────────────────────────────
+export interface ModelCostEstimate {
+  model: string;
+  provider: string;
+  tokensIn: number;
+  tokensOut: number;
+  costUSD: number;
+  costINR: number;
+}
+
+export interface RoutingScenario {
+  name: string;
+  route: RoutingTarget;
+  costUSD: number;
+  costINR: number;
+  savingsVsCloudUSD: number;
+  savingsPercent: number;
+}
+
+export interface ProjectCostEstimate {
+  /** Estimated tokens for the given payload/prompt */
+  estimatedTokensIn: number;
+  estimatedTokensOut: number;
+  /** Per-model cost breakdown */
+  byModel: ModelCostEstimate[];
+  /** Routing scenario comparison */
+  scenarios: RoutingScenario[];
+  /** Recommended cheapest safe option */
+  recommendedModel: string;
+  recommendedRoute: RoutingTarget;
+  /** Monthly projection (assumes executions/day) */
+  monthlyProjection: {
+    executionsPerDay: number;
+    costUSD: number;
+    costINR: number;
+  };
+  /** Data sensitivity drives routing */
+  sensitivityLevel: SensitivityLevel;
 }
 
 // ─── LLM ──────────────────────────────────────────────────────────
@@ -188,7 +239,7 @@ export interface Handle {
 export interface ConfigField {
   key: string;
   label: string;
-  type: 'text' | 'textarea' | 'number' | 'boolean' | 'select' | 'code' | 'expression';
+  type: 'text' | 'textarea' | 'number' | 'boolean' | 'select' | 'code' | 'expression' | 'password';
   default?: unknown;
   options?: { label: string; value: string }[];
   required?: boolean;
@@ -202,7 +253,7 @@ export interface NodeMeta {
   type: NodeType;
   label: string;
   description: string;
-  category: 'trigger' | 'ai' | 'logic' | 'data' | 'output';
+  category: 'trigger' | 'ai' | 'logic' | 'data' | 'output' | 'storage';
   color: string;
   icon: string; // inline SVG path d= value
   handles: {

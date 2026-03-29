@@ -1,0 +1,161 @@
+[
+  {
+    "id": "222c2f1c-175e-4dad-ba97-669c82f9a116",
+    "workflowId": "b0bbbc78-a259-4f96-82be-168533cf2bc4",
+    "status": "error",
+    "nodeResults": [
+      {
+        "nodeId": "node-1774766752317",
+        "output": {},
+        "status": "success",
+        "startedAt": "2026-03-29T08:10:55.422Z",
+        "finishedAt": "2026-03-29T08:10:55.423Z"
+      },
+      {
+        "error": "No handler registered for node type: storage.read",
+        "nodeId": "node-1774771273380",
+        "output": {},
+        "status": "error",
+        "startedAt": "2026-03-29T08:10:55.425Z",
+        "finishedAt": "2026-03-29T08:10:55.425Z"
+      },
+      {
+        "nodeId": "node-1774771150047",
+        "output": {
+          "data": {},
+          "level": "public",
+          "confidence": 0.95,
+          "costEstimate": {
+            "byModel": [
+              {
+                "model": "gpt-4o",
+                "costINR": 0.0016599999999999998,
+                "costUSD": 0.000019999999999999998,
+                "provider": "openai",
+                "tokensIn": 1,
+                "tokensOut": 1
+              },
+              {
+                "model": "gpt-4o-mini",
+                "costINR": 0.00006225,
+                "costUSD": 7.5e-7,
+                "provider": "openai",
+                "tokensIn": 1,
+                "tokensOut": 1
+              },
+              {
+                "model": "claude-3-5-sonnet",
+                "costINR": 0.0014939999999999997,
+                "costUSD": 0.000017999999999999997,
+                "provider": "anthropic",
+                "tokensIn": 1,
+                "tokensOut": 1
+              },
+              {
+                "model": "gemini-1.5-flash",
+                "costINR": 0.000031125,
+                "costUSD": 3.75e-7,
+                "provider": "google",
+                "tokensIn": 1,
+                "tokensOut": 1
+              },
+              {
+                "model": "llama3.2",
+                "costINR": 0,
+                "costUSD": 0,
+                "provider": "ollama",
+                "tokensIn": 1,
+                "tokensOut": 1
+              },
+              {
+                "model": "mistral",
+                "costINR": 0,
+                "costUSD": 0,
+                "provider": "ollama",
+                "tokensIn": 1,
+                "tokensOut": 1
+              },
+              {
+                "model": "phi3",
+                "costINR": 0,
+                "costUSD": 0,
+                "provider": "lmstudio",
+                "tokensIn": 1,
+                "tokensOut": 1
+              }
+            ],
+            "scenarios": [
+              {
+                "name": "All Cloud (gemini-1.5-flash)",
+                "route": "cloud",
+                "costINR": 0.000031125,
+                "costUSD": 3.75e-7,
+                "savingsPercent": 0,
+                "savingsVsCloudUSD": 0
+              },
+              {
+                "name": "All Local (Ollama/LMStudio)",
+                "route": "local",
+                "costINR": 0,
+                "costUSD": 0,
+                "savingsPercent": 100,
+                "savingsVsCloudUSD": 3.75e-7
+              },
+              {
+                "name": "Hybrid (Baniya Smart Route)",
+                "route": "hybrid",
+                "costINR": 0.000031125,
+                "costUSD": 3.75e-7,
+                "savingsPercent": 0,
+                "savingsVsCloudUSD": 0
+              }
+            ],
+            "recommendedModel": "llama3.2",
+            "recommendedRoute": "cloud",
+            "sensitivityLevel": "public",
+            "estimatedTokensIn": 1,
+            "monthlyProjection": {
+              "costINR": 0,
+              "costUSD": 0,
+              "executionsPerDay": 100
+            },
+            "estimatedTokensOut": 1
+          },
+          "detectedPatterns": [],
+          "routingRecommendation": "cloud"
+        },
+        "status": "success",
+        "startedAt": "2026-03-29T08:10:55.424Z",
+        "finishedAt": "2026-03-29T08:10:55.426Z"
+      },
+      {
+        "error": "No cloud provider API key configured. Set OPENAI_API_KEY, ANTHROPIC_API_KEY, or GOOGLE_API_KEY.",
+        "nodeId": "node-1774766754309",
+        "output": {},
+        "status": "error",
+        "startedAt": "2026-03-29T08:10:55.427Z",
+        "finishedAt": "2026-03-29T08:10:55.428Z"
+      },
+      {
+        "error": "No handler registered for node type: storage.list",
+        "nodeId": "node-1774771341048",
+        "output": {},
+        "status": "error",
+        "startedAt": "2026-03-29T08:10:55.429Z",
+        "finishedAt": "2026-03-29T08:10:55.429Z"
+      },
+      {
+        "error": "No handler registered for node type: storage.write",
+        "nodeId": "node-1774771305133",
+        "output": {},
+        "status": "error",
+        "startedAt": "2026-03-29T08:10:55.430Z",
+        "finishedAt": "2026-03-29T08:10:55.430Z"
+      }
+    ],
+    "totalCostUsd": 0,
+    "totalLatencyMs": 10,
+    "startedAt": "2026-03-29T02:40:58.413Z",
+    "finishedAt": "2026-03-29T08:10:55.431Z"
+  }
+]

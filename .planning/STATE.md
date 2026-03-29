@@ -6,15 +6,14 @@
 - Phase 1: Foundation - Completed (All verification gaps closed)
 - Phase 2: Intelligence - Planning Complete
 - Phase 3: Engine - Planning Complete
-- Phase 4: Server - Mostly Complete
-- Phase 5: Editor - Partially Complete
-- Phase 6: Dashboard + Polish - Early
+- Phase 4: Server - Complete
+- Phase 5: Editor - Complete
+- Phase 6: Dashboard + Polish - Partially Complete
 
 ## Current Position
 
-- **Active Phase:** 4 — Server
-- **Active Plan:** 04-04 — Zod validation on all routes + error handling hardening
-- **Next Phase:** 5 — Editor (components gap-fill)
+- **Active Phase:** 6 — Dashboard & Polish
+- **Active Plan:** 06-02 — ExecutionDetail polish + Settings dark mode
 
 ## What's Done
 

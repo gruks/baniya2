@@ -13,6 +13,8 @@ import {
   logicLoopHandler, logicWaitHandler,
   dataSetHandler, dataTransformHandler, dataFilterHandler, dataAggregateHandler,
   outputResponseHandler, outputLogHandler,
+  storageReadHandler, storageWriteHandler, storageListHandler, storageDeleteHandler, storageMkdirHandler,
+  folderConnectHandler, folderListHandler, folderReadHandler, folderWriteHandler, folderPatchHandler,
 } from './handlers';
 
 const HANDLER_MAP: Record<NodeType, NodeHandler> = {
@@ -38,6 +40,16 @@ const HANDLER_MAP: Record<NodeType, NodeHandler> = {
   'data.aggregate': dataAggregateHandler,
   'output.response': outputResponseHandler,
   'output.log': outputLogHandler,
+  'storage.read': storageReadHandler,
+  'storage.write': storageWriteHandler,
+  'storage.list': storageListHandler,
+  'storage.delete': storageDeleteHandler,
+  'storage.mkdir': storageMkdirHandler,
+  'folder.connect': folderConnectHandler,
+  'folder.list': folderListHandler,
+  'folder.read': folderReadHandler,
+  'folder.write': folderWriteHandler,
+  'folder.patch': folderPatchHandler,
 };
 
 export class WorkflowEngine extends EventEmitter {
@@ -226,6 +238,9 @@ export class WorkflowEngine extends EventEmitter {
 
     if (incoming.length === 1) {
       const key = `${incoming[0].sourceNodeId}:${incoming[0].sourceHandle}`;
+      if (!nodeOutputs.has(key)) {
+        throw new Error(`Missing expected input from ${key}. Upstream node failed or didn't produce this output.`);
+      }
       return nodeOutputs.get(key) ?? {};
     }
 
@@ -233,6 +248,9 @@ export class WorkflowEngine extends EventEmitter {
     const merged: Record<string, unknown> = {};
     for (const edge of incoming) {
       const key = `${edge.sourceNodeId}:${edge.sourceHandle}`;
+      if (!nodeOutputs.has(key)) {
+        throw new Error(`Missing expected input from ${key}. Upstream node failed or didn't produce this output.`);
+      }
       const output = nodeOutputs.get(key);
       if (output && typeof output === 'object') {
         Object.assign(merged, output);

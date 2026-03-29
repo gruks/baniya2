@@ -7,6 +7,7 @@ import { ExecutionEntity } from '../entities/Execution';
 import { AuthRequest } from '../middleware/auth';
 import { WorkflowEngine } from '@baniya/workflow-engine';
 import { broadcastToAll } from '../websocket';
+import { validate } from '../middleware/validate';
 
 const router: Router = Router();
 const workflowRepo = () => AppDataSource.getRepository(WorkflowEntity);
@@ -31,6 +32,10 @@ const updateSchema = z.object({
   nodes: z.array(z.any()),
   edges: z.array(z.any()),
   active: z.boolean().optional(),
+});
+
+const executeSchema = z.object({
+  payload: z.record(z.unknown()).optional(),
 });
 
 // GET /api/workflows
@@ -169,7 +174,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 // POST /api/workflows/:id/execute
-router.post('/:id/execute', async (req, res) => {
+router.post('/:id/execute', validate(executeSchema), async (req, res) => {
   try {
     const wf = await workflowRepo().findOneBy({ id: req.params.id });
     if (!wf) { res.status(404).json({ error: 'Workflow not found' }); return; }

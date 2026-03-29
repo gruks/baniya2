@@ -11,6 +11,7 @@ const router = createRouter({
     { path: '/executions/:id', component: () => import('../views/ExecutionDetail.vue'), meta: { auth: true } },
     { path: '/dashboard', component: () => import('../views/BaniyaDashboard.vue'), meta: { auth: true } },
     { path: '/settings', component: () => import('../views/Settings.vue'), meta: { auth: true } },
+    { path: '/files', component: () => import('../views/FileSystemAgent.vue'), meta: { auth: true } },
   ],
 });
 

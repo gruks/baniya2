@@ -23,7 +23,7 @@ import { Handle, Position } from '@vue-flow/core';
 const props = defineProps<{ data: any }>();
 
 const NODE_COLORS: Record<string, string> = {
-  trigger: '#6366F1', ai: '#0D9E75', logic: '#F59E0B', data: '#8B5CF6', output: '#64748B',
+  trigger: '#6366F1', ai: '#0D9E75', logic: '#F59E0B', data: '#8B5CF6', output: '#64748B', storage: '#0EA5E9', folder: '#EA580C',
 };
 
 const ICONS: Record<string, string> = {
@@ -51,6 +51,8 @@ const category = computed(() => {
   if (type.startsWith('ai')) return 'ai';
   if (type.startsWith('logic')) return 'logic';
   if (type.startsWith('data')) return 'data';
+  if (type.startsWith('storage')) return 'storage';
+  if (type.startsWith('folder')) return 'folder';
   return 'output';
 });
 
