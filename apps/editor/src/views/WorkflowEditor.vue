@@ -244,12 +244,18 @@ async function saveWorkflow() {
     targetNodeId: e.target,
     targetHandle: e.targetHandle || 'in',
   }));
-  await store.save(route.params.id as string, {
-    name: workflowName.value,
-    nodes: wfNodes,
-    edges: wfEdges,
-  });
-  saving.value = false;
+  try {
+    await store.save(route.params.id as string, {
+      name: workflowName.value,
+      nodes: wfNodes,
+      edges: wfEdges,
+    });
+  } catch (err: any) {
+    console.error('Save failed:', err);
+    alert('Failed to save workflow: ' + err.message);
+  } finally {
+    saving.value = false;
+  }
 }
 
 function autoSave() {

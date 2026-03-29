@@ -1,19 +1,34 @@
 import type { LLMResponse, RouterConfig } from '@baniya/types';
 import { LocalProviderUnavailableError } from '../errors';
 
-const OLLAMA_URL = process.env.BANIYA_OLLAMA_URL || 'http://localhost:11434';
-const LMSTUDIO_URL = process.env.BANIYA_LMSTUDIO_URL || 'http://localhost:1234';
+const DEFAULT_OLLAMA_URL = process.env.BANIYA_OLLAMA_URL || 'http://localhost:11434';
+const DEFAULT_LMSTUDIO_URL = process.env.BANIYA_LMSTUDIO_URL || 'http://localhost:1234';
+
+export interface LocalSettings {
+  ollamaUrl?: string;
+  ollamaEnabled?: boolean;
+  defaultLocalModel?: string;
+}
+
+function getUrls(settings?: LocalSettings): { ollamaUrl: string; lmstudioUrl: string } {
+  return {
+    ollamaUrl: settings?.ollamaUrl || DEFAULT_OLLAMA_URL,
+    lmstudioUrl: DEFAULT_LMSTUDIO_URL,
+  };
+}
 
 let cachedProvider: { name: 'ollama' | 'lmstudio'; checkedAt: number } | null = null;
 const CACHE_TTL_MS = 30_000;
 
-async function detectLocalProvider(): Promise<'ollama' | 'lmstudio'> {
+async function detectLocalProvider(settings?: LocalSettings): Promise<'ollama' | 'lmstudio'> {
   if (cachedProvider && Date.now() - cachedProvider.checkedAt < CACHE_TTL_MS) {
     return cachedProvider.name;
   }
 
+  const { ollamaUrl, lmstudioUrl } = getUrls(settings);
+
   try {
-    const res = await fetch(`${OLLAMA_URL}/`, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${ollamaUrl}/`, { signal: AbortSignal.timeout(3000) });
     if (res.ok) {
       cachedProvider = { name: 'ollama', checkedAt: Date.now() };
       return 'ollama';
@@ -21,7 +36,7 @@ async function detectLocalProvider(): Promise<'ollama' | 'lmstudio'> {
   } catch { /* ignore */ }
 
   try {
-    const res = await fetch(`${LMSTUDIO_URL}/v1/models`, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${lmstudioUrl}/v1/models`, { signal: AbortSignal.timeout(3000) });
     if (res.ok) {
       cachedProvider = { name: 'lmstudio', checkedAt: Date.now() };
       return 'lmstudio';
@@ -31,9 +46,10 @@ async function detectLocalProvider(): Promise<'ollama' | 'lmstudio'> {
   throw new LocalProviderUnavailableError();
 }
 
-async function callOllama(prompt: string, config: RouterConfig): Promise<LLMResponse> {
-  const model = config.preferredLocalModel || 'llama3.2';
-  const res = await fetch(`${OLLAMA_URL}/api/generate`, {
+async function callOllama(prompt: string, config: RouterConfig, settings?: LocalSettings): Promise<LLMResponse> {
+  const { ollamaUrl } = getUrls(settings);
+  const model = config.preferredLocalModel || settings?.defaultLocalModel || 'llama3.2';
+  const res = await fetch(`${ollamaUrl}/api/generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -73,8 +89,9 @@ async function callOllama(prompt: string, config: RouterConfig): Promise<LLMResp
   };
 }
 
-async function callLMStudio(prompt: string, config: RouterConfig): Promise<LLMResponse> {
-  const res = await fetch(`${LMSTUDIO_URL}/v1/chat/completions`, {
+async function callLMStudio(prompt: string, config: RouterConfig, settings?: LocalSettings): Promise<LLMResponse> {
+  const { lmstudioUrl } = getUrls(settings);
+  const res = await fetch(`${lmstudioUrl}/v1/chat/completions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -111,15 +128,19 @@ async function callLMStudio(prompt: string, config: RouterConfig): Promise<LLMRe
   };
 }
 
-export async function callLocal(prompt: string, config: RouterConfig): Promise<LLMResponse> {
-  const provider = await detectLocalProvider();
-  if (provider === 'ollama') return callOllama(prompt, config);
-  return callLMStudio(prompt, config);
+export async function callLocal(prompt: string, config: RouterConfig, settings?: LocalSettings): Promise<LLMResponse> {
+  if (settings?.ollamaEnabled === false) {
+    throw new LocalProviderUnavailableError();
+  }
+  const provider = await detectLocalProvider(settings);
+  if (provider === 'ollama') return callOllama(prompt, config, settings);
+  return callLMStudio(prompt, config, settings);
 }
 
-export async function checkOllamaStatus(): Promise<boolean> {
+export async function checkOllamaStatus(settings?: LocalSettings): Promise<boolean> {
   try {
-    const res = await fetch(`${OLLAMA_URL}/`, { signal: AbortSignal.timeout(3000) });
+    const { ollamaUrl } = getUrls(settings);
+    const res = await fetch(`${ollamaUrl}/`, { signal: AbortSignal.timeout(3000) });
     return res.ok;
   } catch {
     return false;
@@ -128,16 +149,17 @@ export async function checkOllamaStatus(): Promise<boolean> {
 
 export async function checkLMStudioStatus(): Promise<boolean> {
   try {
-    const res = await fetch(`${LMSTUDIO_URL}/v1/models`, { signal: AbortSignal.timeout(3000) });
+    const res = await fetch(`${DEFAULT_LMSTUDIO_URL}/v1/models`, { signal: AbortSignal.timeout(3000) });
     return res.ok;
   } catch {
     return false;
   }
 }
 
-export async function listOllamaModels(): Promise<string[]> {
+export async function listOllamaModels(settings?: LocalSettings): Promise<string[]> {
   try {
-    const res = await fetch(`${OLLAMA_URL}/api/tags`, { signal: AbortSignal.timeout(3000) });
+    const { ollamaUrl } = getUrls(settings);
+    const res = await fetch(`${ollamaUrl}/api/tags`, { signal: AbortSignal.timeout(3000) });
     if (!res.ok) return [];
     const data = await res.json() as { models?: { name: string }[] };
     return (data.models ?? []).map(m => m.name);

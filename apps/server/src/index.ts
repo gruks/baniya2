@@ -11,6 +11,7 @@ import { authRouter } from './routes/auth';
 import { workflowRouter } from './routes/workflows';
 import { executionRouter } from './routes/executions';
 import { baniyaRouter } from './routes/baniya';
+import { settingsRouter } from './routes/settings';
 import { webhookRouter } from './routes/webhooks';
 import { setupWebSocket } from './websocket';
 import { seedDemoWorkflow } from './seed';
@@ -37,6 +38,7 @@ async function main() {
   app.use('/api/workflows', jwtMiddleware, workflowRouter);
   app.use('/api/executions', jwtMiddleware, executionRouter);
   app.use('/api/baniya', jwtMiddleware, baniyaRouter);
+  app.use('/api/settings', jwtMiddleware, settingsRouter);
 
   // Webhook routes (no auth)
   app.use('/webhooks', webhookRouter);

@@ -108,14 +108,24 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const body = updateSchema.parse(req.body);
+    console.log(`[Workflow PUT] Saving workflow ${req.params.id}:`, {
+      name: body.name,
+      nodesCount: body.nodes?.length ?? 0,
+      edgesCount: body.edges?.length ?? 0,
+    });
     const workflow = await workflowRepo().findOneBy({ id: req.params.id });
-    if (!workflow) { res.status(404).json({ error: 'Workflow not found' }); return; }
+    if (!workflow) {
+      console.log(`[Workflow PUT] Workflow not found: ${req.params.id}`);
+      res.status(404).json({ error: 'Workflow not found' });
+      return;
+    }
 
     workflow.name = body.name;
     workflow.description = body.description ?? workflow.description;
-    workflow.definition = { nodes: body.nodes, edges: body.edges };
+    workflow.definition = { nodes: body.nodes ?? [], edges: body.edges ?? [] };
     if (body.active !== undefined) workflow.active = body.active;
     await workflowRepo().save(workflow);
+    console.log(`[Workflow PUT] Saved successfully: ${workflow.id}`);
 
     res.json({
       id: workflow.id,
@@ -128,8 +138,9 @@ router.put('/:id', async (req, res) => {
       updatedAt: workflow.updatedAt.toISOString(),
     });
   } catch (err) {
+    console.error(`[Workflow PUT] Error saving workflow ${req.params.id}:`, err);
     if (err instanceof z.ZodError) { res.status(400).json({ error: err.errors }); return; }
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', details: err instanceof Error ? err.message : String(err) });
   }
 });
 

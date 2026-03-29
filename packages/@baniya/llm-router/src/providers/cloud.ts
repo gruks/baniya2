@@ -3,29 +3,38 @@ import { CloudProviderUnavailableError } from '../errors';
 
 type CloudProvider = 'openai' | 'anthropic' | 'gemini';
 
-function getAvailableProvider(preferred?: string): { provider: CloudProvider; model: string; key: string } {
-  // If a preferred model is specified, try to match
+export interface CloudSettings {
+  openaiApiKey?: string | null;
+  anthropicApiKey?: string | null;
+  googleApiKey?: string | null;
+  defaultCloudModel?: string;
+}
+
+function getAvailableProvider(preferred?: string, settings?: CloudSettings): { provider: CloudProvider; model: string; key: string } {
+  const openaiKey = settings?.openaiApiKey ?? process.env.OPENAI_API_KEY;
+  const anthropicKey = settings?.anthropicApiKey ?? process.env.ANTHROPIC_API_KEY;
+  const googleKey = settings?.googleApiKey ?? process.env.GOOGLE_API_KEY;
+
   if (preferred) {
-    if (preferred.startsWith('gpt-') && process.env.OPENAI_API_KEY) {
-      return { provider: 'openai', model: preferred, key: process.env.OPENAI_API_KEY };
+    if (preferred.startsWith('gpt-') && openaiKey) {
+      return { provider: 'openai', model: preferred, key: openaiKey };
     }
-    if (preferred.startsWith('claude-') && process.env.ANTHROPIC_API_KEY) {
-      return { provider: 'anthropic', model: preferred, key: process.env.ANTHROPIC_API_KEY };
+    if (preferred.startsWith('claude-') && anthropicKey) {
+      return { provider: 'anthropic', model: preferred, key: anthropicKey };
     }
-    if (preferred.startsWith('gemini-') && process.env.GOOGLE_API_KEY) {
-      return { provider: 'gemini', model: preferred, key: process.env.GOOGLE_API_KEY };
+    if (preferred.startsWith('gemini-') && googleKey) {
+      return { provider: 'gemini', model: preferred, key: googleKey };
     }
   }
 
-  // Cheapest-first fallback priority
-  if (process.env.GOOGLE_API_KEY) {
-    return { provider: 'gemini', model: 'gemini-1.5-flash', key: process.env.GOOGLE_API_KEY };
+  if (googleKey) {
+    return { provider: 'gemini', model: settings?.defaultCloudModel || 'gemini-1.5-flash', key: googleKey };
   }
-  if (process.env.OPENAI_API_KEY) {
-    return { provider: 'openai', model: 'gpt-4o-mini', key: process.env.OPENAI_API_KEY };
+  if (openaiKey) {
+    return { provider: 'openai', model: 'gpt-4o-mini', key: openaiKey };
   }
-  if (process.env.ANTHROPIC_API_KEY) {
-    return { provider: 'anthropic', model: 'claude-haiku-4-5', key: process.env.ANTHROPIC_API_KEY };
+  if (anthropicKey) {
+    return { provider: 'anthropic', model: 'claude-haiku-4-5', key: anthropicKey };
   }
 
   throw new CloudProviderUnavailableError();
@@ -150,12 +159,12 @@ async function callGemini(prompt: string, config: RouterConfig, model: string, k
   };
 }
 
-export async function callCloud(prompt: string, config: RouterConfig): Promise<LLMResponse> {
-  const { provider, model, key } = getAvailableProvider(config.preferredCloudModel);
+export async function callCloud(prompt: string, config: RouterConfig, settings?: CloudSettings): Promise<LLMResponse> {
+  const { provider, model, key } = getAvailableProvider(config.preferredCloudModel, settings);
 
   switch (provider) {
     case 'openai':    return callOpenAI(prompt, config, model, key);
     case 'anthropic': return callAnthropic(prompt, config, model, key);
-    case 'gemini':    return callGemini(prompt, config, model, key);
+    case 'gemini':   return callGemini(prompt, config, model, key);
   }
 }
