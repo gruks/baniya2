@@ -20,7 +20,7 @@ Plans:
 | 1     | Foundation         | ✅ Complete | 3     | 3         |
 | 2     | Intelligence       | ✅ Complete | 3     | 3         |
 | 3     | Engine             | ✅ Complete | 3     | 3         |
-| 4     | Server             | ⚠️ Partial  | 5     | 4         |
+| 4     | Server             | ✅ Complete | 5     | 5         |
 | 5     | Editor             | ⚠️ Partial  | 5     | 3         |
 | 6     | Dashboard & Polish | ⚠️ Partial  | 4     | 1         |
 | 7     | AI Agent System    | ✅ Complete | 4     | 4         |
@@ -53,8 +53,9 @@ Plans:
   - [x] 05-01: Scaffold (Vite, Vue 3, Pinia, router, design tokens, AppSidebar)
   - [x] 05-02: WorkflowList + WorkflowEditor + BaniyaNode
   - [x] 05-03: API layer + stores + WebSocket composable
-  - [ ] 05-04: Missing components (NodePicker, NodeConfigPanel, EdgeLabel, MiniExecutionBadge, Topbar, Modal, Badge, Spinner, EmptyState)
-  - [ ] 05-05: Dashboard components (CostCard, SavingsCard, RoutingPie, AuditTable, ProviderStatus)
+  - [x] 05-04: Missing components (NodePicker, NodeConfigPanel, EdgeLabel, MiniExecutionBadge, Topbar, Modal, Badge, Spinner, EmptyState)
+  - [x] 05-05: Dashboard components (CostCard, SavingsCard, RoutingPie, AuditTable, ProviderStatus)
+  - [ ] 05-06: Gap closure — wire orphaned components (Badge, Modal, Spinner, EmptyState, EdgeLabel, MiniExecutionBadge)
 
 - [ ] **Phase 6: Dashboard & Polish** — Dashboard views + dark mode + demo
   - [x] 06-01: BaniyaDashboard view (exists but needs dashboard sub-components)
