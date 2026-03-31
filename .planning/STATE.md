@@ -5,19 +5,19 @@
 ## Phase Status
 
 - Phase 1: Foundation - Completed (All verification gaps closed)
-- Phase 2: Intelligence - Planning Complete
-- Phase 3: Engine - Planning Complete
+- Phase 2: Intelligence - Completed
+- Phase 3: Engine - Completed
 - Phase 4: Server - Complete
 - Phase 5: Editor - Complete
-- Phase 6: Dashboard + Polish - Partially Complete
-- Phase 7: Agent System - In Progress
+- Phase 6: Dashboard & Polish - Partially Complete
+- Phase 7: Agent System - Complete
 
 ## Current Position
 
 - **Active Phase:** 7 — Agent System
-- **Active Plan:** 07-03 — Agent node types for workflow engine
-- **Current Plan:** 3/4
-- **Phase Progress:** Agent node types complete, ready for template editor
+- **Active Plan:** Complete
+- **Current Plan:** 4/4
+- **Phase Progress:** All 4 plans complete. Phase verified and ready.
 
 ## What's Done
 
@@ -66,17 +66,17 @@
 - **MISSING:** NodePicker, NodeConfigPanel, EdgeLabel, MiniExecutionBadge, Topbar, Modal, Badge, Spinner, EmptyState
 - **MISSING:** Dashboard sub-components (CostCard, SavingsCard, RoutingPie, AuditTable, ProviderStatus)
 
-### Phase 7: Agent System ⚙️ In Progress
+### Phase 7: Agent System ✅ Complete
 
 - @baniya/agents package created
 - AgentTemplate, ToolDefinition, AgentExecution types
 - Zod-based template validation with comprehensive checks
 - AgentStorage with in-memory CRUD and file-based persistence
 - Markdown parser with YAML frontmatter support
-- **DONE:** Tool registry with file/command tools and security sandbox
-- **DONE:** Pre-built templates (researcher, planner, reviewer) with builtin loader
-- **DONE:** Agent node types (agent.execute, agent.chat) with handlers in workflow engine
-- **NEXT:** Agent UI components and template editor
+- Tool registry with file/command tools and security sandbox
+- Pre-built templates (researcher, planner, reviewer) with builtin loader
+- Agent node types (agent.execute, agent.chat) with handlers in workflow engine
+- AgentExecutor with ReAct loop implementation
 
 ## Decisions Log
 
@@ -101,9 +101,8 @@ None currently.
 
 ## Next Steps
 
-1. Build Phase 7 agent nodes for workflow engine
-2. Implement agent execution engine with ReAct loop
-3. Add agent UI components (template editor, template library)
+1. Complete remaining work on Phase 6 (Dashboard & Polish)
+2. Phase 8: Not yet planned
 
 ---
 
