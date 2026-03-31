@@ -36,32 +36,44 @@
         <!-- Text input -->
         <input
           v-if="field.type === 'text'"
-          v-model="config[field.key]"
+          :value="String(config[field.key] ?? '')"
           type="text"
           class="form-input"
           :placeholder="field.placeholder"
-          @blur="emitChange"
+          @input="
+            config[field.key] = ($event.target as HTMLInputElement).value;
+            emitChange();
+          "
         />
 
         <!-- Textarea -->
         <textarea
           v-else-if="field.type === 'textarea'"
-          v-model="config[field.key]"
+          :value="String(config[field.key] ?? '')"
           class="form-textarea"
           :placeholder="field.placeholder"
           rows="4"
+          @input="
+            config[field.key] = ($event.target as HTMLTextAreaElement).value;
+            emitChange();
+          "
           @blur="emitChange"
         ></textarea>
 
         <!-- Number input -->
         <input
           v-else-if="field.type === 'number'"
-          v-model.number="config[field.key]"
+          :value="Number(config[field.key] ?? 0)"
           type="number"
           class="form-input"
           :min="field.min"
           :max="field.max"
-          @blur="emitChange"
+          @input="
+            config[field.key] = Number(
+              ($event.target as HTMLInputElement).value
+            );
+            emitChange();
+          "
         />
 
         <!-- Boolean / Toggle -->
@@ -98,8 +110,13 @@
           class="code-field"
         >
           <textarea
-            v-model="config[field.key]"
+            :value="String(config[field.key] ?? '')"
             class="form-code"
+            :placeholder="field.placeholder"
+            rows="5"
+            @input="config[field.key] = ($event.target as HTMLTextAreaElement).value; emitChange()"
+            @blur="emitChange"
+          ></textarea>
             :placeholder="field.placeholder"
             rows="5"
             @blur="emitChange"
@@ -188,7 +205,7 @@ watch(
   newNode => {
     if (newNode) {
       localLabel.value = newNode.data.label || '';
-      config.value = { ...newNode.data.config } || {};
+      config.value = { ...(newNode.data.config || {}) };
     }
   },
   { immediate: true, deep: true }
