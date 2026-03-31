@@ -58,9 +58,10 @@ Plans:
   - [x] 05-06: Gap closure — wire orphaned components (Badge, Modal, Spinner, EmptyState, EdgeLabel, MiniExecutionBadge)
 
 - [ ] **Phase 6: Dashboard & Polish** — Dashboard views + dark mode + demo
+  - Plans: 4 plans
   - [x] 06-01: BaniyaDashboard view (exists but needs dashboard sub-components)
-  - [ ] 06-02: ExecutionDetail view polish + Settings view dark mode toggle
-  - [ ] 06-03: Login/Register views polish + proper auth flow
+  - [x] 06-02: ExecutionDetail view polish + Settings view dark mode toggle
+  - [x] 06-03: Login/Register views polish + proper auth flow
   - [ ] 06-04: Seed demo workflow + end-to-end verification
 
 - [x] **Phase 7: AI Agent System** — Agent templates + tool registry + execution
