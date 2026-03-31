@@ -9,6 +9,7 @@
     "test": "echo 'No tests yet'"
   },
   "dependencies": {
+    "@baniya/agents": "workspace:*",
     "@baniya/audit-logger": "workspace:*",
     "@baniya/data-classifier": "workspace:*",
     "@baniya/llm-router": "workspace:*",
