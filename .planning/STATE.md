@@ -44,14 +44,14 @@
 - `@baniya/nodes` — full registry with metadata, config schemas, icons
 - `@baniya/audit-logger` — TypeORM entity, write + query methods
 
-### Phase 4: Server ⚠️ Mostly Complete
+### Phase 4: Server ✅ Complete
 
 - Express server with TypeORM, JWT middleware
 - User, Workflow, Execution entities
 - Routes: auth, workflows, executions, baniya, webhooks
 - WebSocket broadcaster
 - Seed data for demo workflow
-- **MISSING:** Zod validation on route inputs
+- **Zod validation on ALL API routes**
 
 ### Phase 5: Editor ⚠️ Partially Complete
 
