@@ -9,7 +9,7 @@
 - Phase 3: Engine - Completed
 - Phase 4: Server ✅ Complete (All gaps closed: webhooks.ts, filesystem.ts validation added)
 - Phase 5: Editor ✅ Complete (05-04 + 05-05 + 05-06: All components built, wired, and verified)
-- Phase 6: Dashboard & Polish - Partially Complete
+- Phase 6: Dashboard & Polish - Partially Complete (06-02 complete: ExecutionDetail + Settings)
 - Phase 7: Agent System - Complete
 
 ## Current Position
