@@ -9,15 +9,15 @@
 - Phase 3: Engine - Completed
 - Phase 4: Server ✅ Complete (All gaps closed: webhooks.ts, filesystem.ts validation added)
 - Phase 5: Editor ✅ Complete (05-04 + 05-05 + 05-06: All components built, wired, and verified)
-- Phase 6: Dashboard & Polish - Partially Complete (06-02 complete: ExecutionDetail + Settings)
+- Phase 6: Dashboard & Polish - Partially Complete (06-02 + 06-03 complete: ExecutionDetail, Settings, Auth Flow)
 - Phase 7: Agent System - Complete
 
 ## Current Position
 
-- **Active Phase:** 7 — Agent System
-- **Active Plan:** Complete
-- **Current Plan:** 4/4
-- **Phase Progress:** All 4 plans complete. Phase verified and ready.
+- **Active Phase:** 6 — Dashboard & Polish
+- **Active Plan:** 03
+- **Current Plan:** 3/3
+- **Phase Progress:** 2 of 3 plans complete. One remaining plan (06-04).
 
 ## What's Done
 
@@ -101,6 +101,8 @@
 | ToolExecutor                                                   | Dynamic tool execution at runtime in ToolRegistry    | 7     |
 | Explicit Record types for Badge color mapping (TS strict mode) | 5-06                                                 |
 | Vue Flow edge template with BezierEdge + EdgeLabel overlay     | 5-06                                                 |
+| Auth store owns loading/error state — views read from store    | 6-03                                                 |
+| Per-route jwtMiddleware on /me instead of blanket /auth skip   | 6-03                                                 |
 
 ## Blockers
 
@@ -108,7 +110,7 @@ None currently.
 
 ## Next Steps
 
-1. Complete remaining work on Phase 6 (Dashboard & Polish)
+1. Complete 06-04 (final dashboard polish plan)
 2. Phase 8: Not yet planned
 
 ---
