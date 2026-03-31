@@ -1,23 +1,22 @@
 import { Router } from 'express';
-import { z } from 'zod';
 import { AppDataSource } from '../data-source';
 import { ExecutionEntity } from '../entities/Execution';
 import { validate } from '../middleware/validate';
-
-const paginationSchema = z.object({
-  workflowId: z.string().optional(),
-  page: z.coerce.number().min(1).optional(),
-  limit: z.coerce.number().min(1).max(100).optional(),
-});
+import { executionQuerySchema } from '../validation/schemas';
 
 const router: Router = Router();
 const executionRepo = () => AppDataSource.getRepository(ExecutionEntity);
 
 // GET /api/executions
-router.get('/', validate(paginationSchema, 'query'), async (req, res) => {
+router.get('/', validate(executionQuerySchema, 'query'), async (req, res) => {
   try {
-    const { workflowId, page = '1', limit = '20' } = req.query as Record<string, string>;
-    const qb = executionRepo().createQueryBuilder('e')
+    const {
+      workflowId,
+      page = '1',
+      limit = '20',
+    } = req.query as Record<string, string>;
+    const qb = executionRepo()
+      .createQueryBuilder('e')
       .orderBy('e.startedAt', 'DESC');
 
     if (workflowId) qb.where('e.workflowId = :workflowId', { workflowId });
@@ -25,7 +24,10 @@ router.get('/', validate(paginationSchema, 'query'), async (req, res) => {
     const total = await qb.getCount();
     const p = parseInt(page);
     const l = parseInt(limit);
-    const rows = await qb.skip((p - 1) * l).take(l).getMany();
+    const rows = await qb
+      .skip((p - 1) * l)
+      .take(l)
+      .getMany();
 
     res.json({
       rows: rows.map(r => ({
@@ -51,7 +53,10 @@ router.get('/', validate(paginationSchema, 'query'), async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const execution = await executionRepo().findOneBy({ id: req.params.id });
-    if (!execution) { res.status(404).json({ error: 'Execution not found' }); return; }
+    if (!execution) {
+      res.status(404).json({ error: 'Execution not found' });
+      return;
+    }
     res.json({
       id: execution.id,
       workflowId: execution.workflowId,
@@ -71,7 +76,10 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const result = await executionRepo().delete(req.params.id);
-    if (result.affected === 0) { res.status(404).json({ error: 'Execution not found' }); return; }
+    if (result.affected === 0) {
+      res.status(404).json({ error: 'Execution not found' });
+      return;
+    }
     res.json({ deleted: true });
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });

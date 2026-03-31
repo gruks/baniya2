@@ -1,50 +1,24 @@
 import { Router } from 'express';
-import { z } from 'zod';
 import { classify, estimateCost } from '@baniya/data-classifier';
-import { BaniyaRouter, checkOllamaStatus, checkLMStudioStatus, listOllamaModels } from '@baniya/llm-router';
+import {
+  BaniyaRouter,
+  checkOllamaStatus,
+  checkLMStudioStatus,
+  listOllamaModels,
+} from '@baniya/llm-router';
 import { AuditLogger } from '@baniya/audit-logger';
 import type { RouterConfig, ProviderStatus } from '@baniya/types';
 import { AppDataSource } from '../data-source';
 import { SettingsEntity } from '../entities/Settings';
 import { validate } from '../middleware/validate';
-
-const classifySchema = z.object({
-  payload: z.unknown(),
-  workflow: z.any().optional(),
-  executionsPerDay: z.number().optional(),
-});
-
-const routeSchema = z.object({
-  payload: z.unknown(),
-  prompt: z.string().min(1),
-  config: z.record(z.unknown()).optional(),
-});
-
-const estimateCostSchema = z.object({
-  payload: z.unknown().optional(),
-  sensitivity: z.enum(['public', 'internal', 'private', 'critical']),
-  workflow: z.any().optional(),
-  executionsPerDay: z.number().optional(),
-});
-
-const chatSchema = z.object({
-  prompt: z.string().min(1),
-  systemPrompt: z.string().optional(),
-  model: z.string().optional(),
-  apiKey: z.string().optional(),
-});
-
-const costSummaryQuerySchema = z.object({
-  workflowId: z.string().optional(),
-  days: z.coerce.number().optional(),
-});
-
-const auditQuerySchema = z.object({
-  workflowId: z.string().optional(),
-  sensitivity: z.string().optional(),
-  page: z.coerce.number().min(1).optional(),
-  limit: z.coerce.number().min(1).max(100).optional(),
-});
+import {
+  classifySchema,
+  routeSchema,
+  estimateCostSchema,
+  chatSchema,
+  costSummaryQuerySchema,
+  auditQuerySchema,
+} from '../validation/schemas';
 
 const router: Router = Router();
 const baniyaRouter = new BaniyaRouter();
@@ -71,20 +45,32 @@ async function getSettings(): Promise<SettingsEntity | null> {
 }
 
 // GET /api/baniya/cost-summary
-router.get('/cost-summary', validate(costSummaryQuerySchema, 'query'), async (req, res) => {
-  try {
-    const { workflowId, days = '30' } = req.query as Record<string, string>;
-    const summary = await getAuditLogger().getCostSummary(workflowId || undefined, parseInt(days));
-    res.json(summary);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to get cost summary' });
+router.get(
+  '/cost-summary',
+  validate(costSummaryQuerySchema, 'query'),
+  async (req, res) => {
+    try {
+      const { workflowId, days = '30' } = req.query as Record<string, string>;
+      const summary = await getAuditLogger().getCostSummary(
+        workflowId || undefined,
+        parseInt(days)
+      );
+      res.json(summary);
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to get cost summary' });
+    }
   }
-});
+);
 
 // GET /api/baniya/audit
 router.get('/audit', validate(auditQuerySchema, 'query'), async (req, res) => {
   try {
-    const { workflowId, sensitivity, page = '1', limit = '20' } = req.query as Record<string, string>;
+    const {
+      workflowId,
+      sensitivity,
+      page = '1',
+      limit = '20',
+    } = req.query as Record<string, string>;
     const result = await getAuditLogger().getRows({
       workflowId: workflowId || undefined,
       sensitivity: sensitivity || undefined,
@@ -101,10 +87,12 @@ router.get('/audit', validate(auditQuerySchema, 'query'), async (req, res) => {
 router.get('/providers/status', async (_req, res) => {
   try {
     const settings = await getSettings();
-    const localSettings = settings ? {
-      ollamaUrl: settings.ollamaUrl,
-      ollamaEnabled: settings.ollamaEnabled,
-    } : undefined;
+    const localSettings = settings
+      ? {
+          ollamaUrl: settings.ollamaUrl,
+          ollamaEnabled: settings.ollamaEnabled,
+        }
+      : undefined;
 
     const [ollama, lmstudio] = await Promise.all([
       checkOllamaStatus(localSettings),
@@ -112,7 +100,8 @@ router.get('/providers/status', async (_req, res) => {
     ]);
 
     const openaiKey = settings?.openaiApiKey || process.env.OPENAI_API_KEY;
-    const anthropicKey = settings?.anthropicApiKey || process.env.ANTHROPIC_API_KEY;
+    const anthropicKey =
+      settings?.anthropicApiKey || process.env.ANTHROPIC_API_KEY;
     const googleKey = settings?.googleApiKey || process.env.GOOGLE_API_KEY;
 
     const status: ProviderStatus = {
@@ -144,8 +133,14 @@ router.post('/classify', validate(classifySchema), (req, res) => {
 router.post('/estimate-cost', validate(estimateCostSchema), (req, res) => {
   try {
     const { payload, sensitivity, workflow, executionsPerDay } = req.body;
-    if (!sensitivity) return res.status(400).json({ error: 'sensitivity is required' });
-    const estimate = estimateCost(payload ?? {}, sensitivity, workflow, executionsPerDay);
+    if (!sensitivity)
+      return res.status(400).json({ error: 'sensitivity is required' });
+    const estimate = estimateCost(
+      payload ?? {},
+      sensitivity,
+      workflow,
+      executionsPerDay
+    );
     res.json(estimate);
   } catch (err) {
     res.status(500).json({ error: 'Cost estimation failed' });
@@ -157,23 +152,32 @@ router.post('/route', validate(routeSchema), async (req, res) => {
   try {
     const { payload, prompt, config } = req.body;
     const settings = await getSettings();
-    const routerSettings = settings ? {
-      local: {
-        ollamaUrl: settings.ollamaUrl,
-        ollamaEnabled: settings.ollamaEnabled,
-        defaultLocalModel: settings.defaultLocalModel,
-      },
-      cloud: {
-        openaiApiKey: settings.openaiApiKey,
-        anthropicApiKey: settings.anthropicApiKey,
-        googleApiKey: settings.googleApiKey,
-        defaultCloudModel: settings.defaultCloudModel,
-      },
-    } : undefined;
-    const result = await baniyaRouter.route(payload, prompt, config as RouterConfig, routerSettings);
+    const routerSettings = settings
+      ? {
+          local: {
+            ollamaUrl: settings.ollamaUrl,
+            ollamaEnabled: settings.ollamaEnabled,
+            defaultLocalModel: settings.defaultLocalModel,
+          },
+          cloud: {
+            openaiApiKey: settings.openaiApiKey,
+            anthropicApiKey: settings.anthropicApiKey,
+            googleApiKey: settings.googleApiKey,
+            defaultCloudModel: settings.defaultCloudModel,
+          },
+        }
+      : undefined;
+    const result = await baniyaRouter.route(
+      payload,
+      prompt,
+      config as RouterConfig,
+      routerSettings
+    );
     res.json(result);
   } catch (err) {
-    res.status(500).json({ error: err instanceof Error ? err.message : 'Routing failed' });
+    res
+      .status(500)
+      .json({ error: err instanceof Error ? err.message : 'Routing failed' });
   }
 });
 
@@ -181,10 +185,12 @@ router.post('/route', validate(routeSchema), async (req, res) => {
 router.get('/models/local', async (_req, res) => {
   try {
     const settings = await getSettings();
-    const localSettings = settings ? {
-      ollamaUrl: settings.ollamaUrl,
-      ollamaEnabled: settings.ollamaEnabled,
-    } : undefined;
+    const localSettings = settings
+      ? {
+          ollamaUrl: settings.ollamaUrl,
+          ollamaEnabled: settings.ollamaEnabled,
+        }
+      : undefined;
     const models = await listOllamaModels(localSettings);
     res.json({ models });
   } catch (err) {
@@ -218,10 +224,14 @@ router.post('/chat', validate(chatSchema), async (req, res) => {
       maxTokens: 4096,
     };
 
-    const result = await baniyaRouter.route({}, prompt, routerConfig, { cloud: cloudSettings as any });
+    const result = await baniyaRouter.route({}, prompt, routerConfig, {
+      cloud: cloudSettings as any,
+    });
     res.json(result);
   } catch (err) {
-    res.status(500).json({ error: err instanceof Error ? err.message : 'Chat failed' });
+    res
+      .status(500)
+      .json({ error: err instanceof Error ? err.message : 'Chat failed' });
   }
 });
 
