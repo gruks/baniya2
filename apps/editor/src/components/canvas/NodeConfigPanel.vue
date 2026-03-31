@@ -114,11 +114,10 @@
             class="form-code"
             :placeholder="field.placeholder"
             rows="5"
-            @input="config[field.key] = ($event.target as HTMLTextAreaElement).value; emitChange()"
-            @blur="emitChange"
-          ></textarea>
-            :placeholder="field.placeholder"
-            rows="5"
+            @input="
+              config[field.key] = ($event.target as HTMLTextAreaElement).value;
+              emitChange();
+            "
             @blur="emitChange"
           ></textarea>
           <div v-if="field.type === 'expression'" class="field-hint">
