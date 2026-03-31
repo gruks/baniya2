@@ -3,21 +3,26 @@
 ## Milestone 1: MVP
 
 Plans:
+
 - [x] 01-foundation-01-PLAN.md — Setup monorepo configuration and base tooling
 - [x] 01-foundation-02-PLAN.md — Create package structure for all packages and apps
 - [x] 01-foundation-03-PLAN.md — Set up development environment, documentation, and CI/CD
-- [x] 01-foundation-04-PLAN.md — Close verification gaps: ESLint/Prettier config, documentation, CI workflow, script implementations
+- [x] 07-01-PLAN.md — Agent template system
+- [x] 07-02-PLAN.md — Tool registry
+- [x] 07-03-PLAN.md — Agent node types
+- [x] 07-04-PLAN.md — Pre-built templates
 
 ### Progress
 
-| Phase | Name | Status | Plans | Completed |
-|-------|------|--------|-------|-----------|
-| 1 | Foundation | ✅ Complete | 3 | 3 |
-| 2 | Intelligence | ✅ Complete | 3 | 3 |
-| 3 | Engine | ✅ Complete | 3 | 3 |
-| 4 | Server | ⚠️ Partial | 4 | 3 |
-| 5 | Editor | ⚠️ Partial | 5 | 3 |
-| 6 | Dashboard & Polish | ⚠️ Partial | 4 | 1 |
+| Phase | Name               | Status      | Plans | Completed |
+| ----- | ------------------ | ----------- | ----- | --------- |
+| 1     | Foundation         | ✅ Complete | 3     | 3         |
+| 2     | Intelligence       | ✅ Complete | 3     | 3         |
+| 3     | Engine             | ✅ Complete | 3     | 3         |
+| 4     | Server             | ⚠️ Partial  | 4     | 3         |
+| 5     | Editor             | ⚠️ Partial  | 5     | 3         |
+| 6     | Dashboard & Polish | ⚠️ Partial  | 4     | 1         |
+| 7     | AI Agent System    | ✅ Complete | 4     | 4         |
 
 ### Phases
 
@@ -55,5 +60,12 @@ Plans:
   - [ ] 06-03: Login/Register views polish + proper auth flow
   - [ ] 06-04: Seed demo workflow + end-to-end verification
 
+- [x] **Phase 7: AI Agent System** — Agent templates + tool registry + execution
+  - [x] 07-01: Agent template system (template format, validation, storage)
+  - [x] 07-02: Tool registry (built-in tools: file ops, command, search)
+  - [x] 07-03: Agent node types (agent.execute, agent.chat)
+  - [x] 07-04: Pre-built template library (Researcher, Planner, Reviewer)
+
 ---
-*Last updated: 2026-03-29 after brownfield assessment*
+
+_Last updated: 2026-03-31_
