@@ -2,8 +2,10 @@
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": false
   },
-  "include": ["src"],
+  "include": ["src", "src/templates/*.md"],
   "exclude": ["src/__tests__"]
 }
