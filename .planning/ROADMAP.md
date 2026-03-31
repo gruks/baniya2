@@ -7,6 +7,7 @@ Plans:
 - [x] 01-foundation-01-PLAN.md — Setup monorepo configuration and base tooling
 - [x] 01-foundation-02-PLAN.md — Create package structure for all packages and apps
 - [x] 01-foundation-03-PLAN.md — Set up development environment, documentation, and CI/CD
+- [x] 01-foundation-04-PLAN.md — Close verification gaps: ESLint/Prettier config, documentation, CI workflow, script implementations
 - [x] 07-01-PLAN.md — Agent template system
 - [x] 07-02-PLAN.md — Tool registry
 - [x] 07-03-PLAN.md — Agent node types
@@ -19,7 +20,7 @@ Plans:
 | 1     | Foundation         | ✅ Complete | 3     | 3         |
 | 2     | Intelligence       | ✅ Complete | 3     | 3         |
 | 3     | Engine             | ✅ Complete | 3     | 3         |
-| 4     | Server             | ⚠️ Partial  | 4     | 3         |
+| 4     | Server             | ⚠️ Partial  | 5     | 4         |
 | 5     | Editor             | ⚠️ Partial  | 5     | 3         |
 | 6     | Dashboard & Polish | ⚠️ Partial  | 4     | 1         |
 | 7     | AI Agent System    | ✅ Complete | 4     | 4         |
@@ -41,11 +42,12 @@ Plans:
   - [x] 03-02: `@baniya/nodes` — registry with metadata for all node types
   - [x] 03-03: `@baniya/audit-logger` — entity, write, query
 
-- [ ] **Phase 4: Server** — Express API + WebSocket
+- [x] **Phase 4: Server** — Express API + WebSocket
   - [x] 04-01: Scaffold server (Express, TypeORM, JWT middleware, entities)
   - [x] 04-02: REST routes (auth, workflows, executions, baniya, webhooks)
   - [x] 04-03: WebSocket broadcaster + seed data
-  - [ ] 04-04: Zod validation on all routes + error handling hardening
+  - [x] 04-04: Zod validation on all routes + error handling hardening (2 gaps found)
+  - [x] 04-05: Close validation gaps (webhooks.ts + filesystem.ts)
 
 - [ ] **Phase 5: Editor** — Vue 3 canvas frontend
   - [x] 05-01: Scaffold (Vite, Vue 3, Pinia, router, design tokens, AppSidebar)
