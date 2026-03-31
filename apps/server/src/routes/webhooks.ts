@@ -1,9 +1,15 @@
 import { Router } from 'express';
-import type { Workflow, TriggerPayload, WorkflowNode, WorkflowEdge } from '@baniya/types';
+import type {
+  Workflow,
+  TriggerPayload,
+  WorkflowNode,
+  WorkflowEdge,
+} from '@baniya/types';
 import { AppDataSource } from '../data-source';
 import { WorkflowEntity } from '../entities/Workflow';
 import { ExecutionEntity } from '../entities/Execution';
 import { workflowEngine } from './workflows';
+import { webhookTriggerSchema } from '../validation/schemas';
 
 const router: Router = Router();
 const workflowRepo = () => AppDataSource.getRepository(WorkflowEntity);
@@ -12,8 +18,17 @@ const executionRepo = () => AppDataSource.getRepository(ExecutionEntity);
 // POST /webhooks/:workflowId/:nodeId
 router.post('/:workflowId/:nodeId', async (req, res) => {
   try {
+    // Validate params
+    webhookTriggerSchema.parse({
+      workflowId: req.params.workflowId,
+      nodeId: req.params.nodeId,
+    });
+
     const wf = await workflowRepo().findOneBy({ id: req.params.workflowId });
-    if (!wf || !wf.active) { res.status(404).json({ error: 'Workflow not found or inactive' }); return; }
+    if (!wf || !wf.active) {
+      res.status(404).json({ error: 'Workflow not found or inactive' });
+      return;
+    }
 
     const workflow: Workflow = {
       id: wf.id,
@@ -47,15 +62,26 @@ router.post('/:workflowId/:nodeId', async (req, res) => {
 
     res.json(summary);
   } catch (err) {
-    res.status(500).json({ error: err instanceof Error ? err.message : 'Execution failed' });
+    res
+      .status(500)
+      .json({ error: err instanceof Error ? err.message : 'Execution failed' });
   }
 });
 
 // GET /webhooks/:workflowId/:nodeId (for GET triggers)
 router.get('/:workflowId/:nodeId', async (req, res) => {
   try {
+    // Validate params
+    webhookTriggerSchema.parse({
+      workflowId: req.params.workflowId,
+      nodeId: req.params.nodeId,
+    });
+
     const wf = await workflowRepo().findOneBy({ id: req.params.workflowId });
-    if (!wf || !wf.active) { res.status(404).json({ error: 'Workflow not found or inactive' }); return; }
+    if (!wf || !wf.active) {
+      res.status(404).json({ error: 'Workflow not found or inactive' });
+      return;
+    }
 
     const workflow: Workflow = {
       id: wf.id,
@@ -77,7 +103,9 @@ router.get('/:workflowId/:nodeId', async (req, res) => {
     const summary = await workflowEngine.execute(workflow, trigger);
     res.json(summary);
   } catch (err) {
-    res.status(500).json({ error: err instanceof Error ? err.message : 'Execution failed' });
+    res
+      .status(500)
+      .json({ error: err instanceof Error ? err.message : 'Execution failed' });
   }
 });
 
