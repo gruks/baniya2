@@ -1,5 +1,8 @@
 <template>
-  <span class="spinner" :style="{ width: size + 'px', height: size + 'px' }"></span>
+  <span
+    class="spinner"
+    :style="{ width: size + 'px', height: size + 'px' }"
+  ></span>
 </template>
 
 <script setup lang="ts">
@@ -13,6 +16,12 @@ withDefaults(defineProps<{ size?: number }>(), { size: 16 });
   border-top-color: var(--color-brand);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
+  flex-shrink: 0;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>
