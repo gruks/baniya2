@@ -14,6 +14,8 @@ export type NodeType =
   | 'ai.rewrite'
   | 'ai.translate'
   | 'ai.moderate'
+  | 'ai.ollama'
+  | 'ai.agent'
   | 'logic.if'
   | 'logic.switch'
   | 'logic.merge'
@@ -34,7 +36,9 @@ export type NodeType =
   | 'folder.list'
   | 'folder.read'
   | 'folder.write'
-  | 'folder.patch';
+  | 'folder.patch'
+  | 'agent.execute'
+  | 'agent.chat';
 
 // ─── Core Structures ──────────────────────────────────────────────
 export interface Position {
@@ -149,7 +153,10 @@ export interface NodeExecutionResult {
   error?: string;
   startedAt: string;
   finishedAt: string;
-  llmMeta?: Pick<LLMResponse, 'model' | 'costUSD' | 'latencyMs' | 'routing' | 'sensitivity'>;
+  llmMeta?: Pick<
+    LLMResponse,
+    'model' | 'costUSD' | 'latencyMs' | 'routing' | 'sensitivity'
+  >;
 }
 
 export interface ExecutionSummary {
@@ -239,7 +246,15 @@ export interface Handle {
 export interface ConfigField {
   key: string;
   label: string;
-  type: 'text' | 'textarea' | 'number' | 'boolean' | 'select' | 'code' | 'expression' | 'password';
+  type:
+    | 'text'
+    | 'textarea'
+    | 'number'
+    | 'boolean'
+    | 'select'
+    | 'code'
+    | 'expression'
+    | 'password';
   default?: unknown;
   options?: { label: string; value: string }[];
   required?: boolean;
@@ -253,7 +268,14 @@ export interface NodeMeta {
   type: NodeType;
   label: string;
   description: string;
-  category: 'trigger' | 'ai' | 'logic' | 'data' | 'output' | 'storage';
+  category:
+    | 'trigger'
+    | 'ai'
+    | 'logic'
+    | 'data'
+    | 'output'
+    | 'storage'
+    | 'agent';
   color: string;
   icon: string; // inline SVG path d= value
   handles: {
@@ -267,7 +289,12 @@ export interface NodeMeta {
 export type WSEvent =
   | { type: 'execution:started'; executionId: string; workflowId: string }
   | { type: 'node:running'; executionId: string; nodeId: string }
-  | { type: 'node:done'; executionId: string; nodeId: string; result: NodeExecutionResult }
+  | {
+      type: 'node:done';
+      executionId: string;
+      nodeId: string;
+      result: NodeExecutionResult;
+    }
   | { type: 'node:error'; executionId: string; nodeId: string; error: string }
   | { type: 'execution:done'; executionId: string; summary: ExecutionSummary }
   | { type: 'providers:status'; status: ProviderStatus };

@@ -48,21 +48,22 @@ async function detectLocalProvider(settings?: LocalSettings): Promise<'ollama' |
 
 async function callOllama(prompt: string, config: RouterConfig, settings?: LocalSettings): Promise<LLMResponse> {
   const { ollamaUrl } = getUrls(settings);
-  const model = config.preferredLocalModel || settings?.defaultLocalModel || 'llama3.2';
-  const res = await fetch(`${ollamaUrl}/api/generate`, {
+  const model = config.preferredLocalModel || settings?.defaultLocalModel || process.env.BANIYA_DEFAULT_LOCAL_MODEL || 'qwen3-vl:4b';
+
+  const messages: { role: string; content: string }[] = [];
+  if (config.systemPrompt) messages.push({ role: 'system', content: config.systemPrompt });
+  messages.push({ role: 'user', content: prompt });
+
+  const res = await fetch(`${ollamaUrl}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model,
-      prompt,
-      system: config.systemPrompt || undefined,
+      messages,
       stream: false,
-      options: {
-        num_predict: config.maxTokens ?? 1000,
-        temperature: config.temperature ?? 0.7,
-      },
+      options: { num_predict: config.maxTokens ?? 2048 },
     }),
-    signal: AbortSignal.timeout(30_000),
+    signal: AbortSignal.timeout(180_000),
   });
 
   if (!res.ok) {
@@ -70,14 +71,14 @@ async function callOllama(prompt: string, config: RouterConfig, settings?: Local
   }
 
   const data = await res.json() as {
-    response: string;
+    message?: { content: string };
     model: string;
     prompt_eval_count?: number;
     eval_count?: number;
   };
 
   return {
-    text: data.response,
+    text: data.message?.content ?? '',
     model: `ollama/${data.model}`,
     tokensIn: data.prompt_eval_count ?? 0,
     tokensOut: data.eval_count ?? 0,

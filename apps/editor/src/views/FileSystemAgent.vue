@@ -166,7 +166,8 @@
               <option value="gpt-4o-mini">GPT-4o Mini</option>
               <option value="claude-sonnet-4-6">Claude Sonnet</option>
               <option value="claude-haiku-4-5">Claude Haiku</option>
-              <option value="gemini-1.5-flash">Gemini Flash</option>
+              <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+              <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
             </select>
           </div>
 

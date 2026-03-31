@@ -23,7 +23,7 @@ export class SettingsEntity {
   @Column({ type: 'varchar', default: 'llama3.2' })
   defaultLocalModel!: string;
 
-  @Column({ type: 'varchar', default: 'gemini-1.5-flash' })
+  @Column({ type: 'varchar', default: 'gemini-2.0-flash' })
   defaultCloudModel!: string;
 
   @Column({ type: 'varchar', default: 'auto' })
