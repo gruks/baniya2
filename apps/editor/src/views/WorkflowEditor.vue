@@ -39,8 +39,16 @@
             <Controls />
             <MiniMap />
             <template #edge-default="edgeProps">
-              <BaseEdge :id="edgeProps.id" :path="edgeProps.path" />
-              <EdgeLabel :label="edgeProps.sourceHandle || ''" />
+              <BezierEdge
+                :id="edgeProps.id"
+                :source-x="edgeProps.sourceX"
+                :source-y="edgeProps.sourceY"
+                :target-x="edgeProps.targetX"
+                :target-y="edgeProps.targetY"
+                :source-position="edgeProps.sourcePosition"
+                :target-position="edgeProps.targetPosition"
+              />
+              <EdgeLabel :label="edgeProps.sourceHandleId || ''" />
             </template>
           </VueFlow>
         </div>
@@ -211,7 +219,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, markRaw } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { VueFlow, useVueFlow, BaseEdge } from '@vue-flow/core';
+import { VueFlow, useVueFlow, BaseEdge, BezierEdge } from '@vue-flow/core';
 import { Background } from '@vue-flow/background';
 import { Controls } from '@vue-flow/controls';
 import { MiniMap } from '@vue-flow/minimap';

@@ -265,9 +265,12 @@ async function runEstimate() {
 function routeBadgeColor(
   route: string
 ): 'success' | 'warning' | 'info' | 'muted' {
-  return (
-    { local: 'success', hybrid: 'warning', cloud: 'info' }[route] ?? 'muted'
-  );
+  const map: Record<string, 'success' | 'warning' | 'info'> = {
+    local: 'success',
+    hybrid: 'warning',
+    cloud: 'info',
+  };
+  return map[route] ?? 'muted';
 }
 
 function getRouteWidth(val: unknown) {

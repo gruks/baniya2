@@ -116,17 +116,21 @@ function fmt(d: string) {
 function sensitivityBadgeColor(
   l: string
 ): 'error' | 'warning' | 'info' | 'success' | 'muted' {
-  return (
-    {
-      critical: 'error',
-      private: 'warning',
-      internal: 'info',
-      public: 'success',
-    }[l] ?? 'muted'
-  );
+  const map: Record<string, 'error' | 'warning' | 'info' | 'success'> = {
+    critical: 'error',
+    private: 'warning',
+    internal: 'info',
+    public: 'success',
+  };
+  return map[l] ?? 'muted';
 }
 function routeBadgeColor(r: string): 'success' | 'warning' | 'info' | 'muted' {
-  return { local: 'success', hybrid: 'warning', cloud: 'info' }[r] ?? 'muted';
+  const map: Record<string, 'success' | 'warning' | 'info'> = {
+    local: 'success',
+    hybrid: 'warning',
+    cloud: 'info',
+  };
+  return map[r] ?? 'muted';
 }
 </script>
 
