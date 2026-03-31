@@ -8,7 +8,7 @@
 - Phase 2: Intelligence - Completed
 - Phase 3: Engine - Completed
 - Phase 4: Server ✅ Complete (All gaps closed: webhooks.ts, filesystem.ts validation added)
-- Phase 5: Editor ✅ Complete (05-04 + 05-05: All dashboard sub-components built and wired)
+- Phase 5: Editor ✅ Complete (05-04 + 05-05 + 05-06: All components built, wired, and verified)
 - Phase 6: Dashboard & Polish - Partially Complete
 - Phase 7: Agent System - Complete
 
@@ -53,7 +53,7 @@
 - Seed data for demo workflow
 - **Zod validation on ALL API routes**
 
-### Phase 5: Editor ✅ 05-04 Complete
+### Phase 5: Editor ✅ Complete
 
 - Vue 3 + Vite scaffold with Pinia + Vue Router
 - Design tokens (CSS custom properties, dark mode variables)
@@ -65,11 +65,11 @@
 - WebSocket composable
 - **NodePicker** — Left sidebar (280px), search, drag-to-add, all node types from @baniya/nodes
 - **NodeConfigPanel** — Right panel (320px), dynamic field rendering (text/textarea/number/boolean/select/code/expression)
-- **Shared components** — Topbar, Modal, Badge, Spinner, EmptyState
-- **Canvas components** — EdgeLabel, MiniExecutionBadge
+- **Shared components** — Topbar, Modal, Badge, Spinner, EmptyState — all wired into consuming views
+- **Canvas components** — EdgeLabel, MiniExecutionBadge — integrated into Vue Flow and BaniyaNode
 - **WorkflowEditor** — Three-panel layout fully integrated with all components
-- **Build passes** — vue-tsc + vite build clean after fixing TS errors and missing deps
-- **MISSING:** Dashboard sub-components (CostCard, SavingsCard, RoutingPie, AuditTable, ProviderStatus)
+- **Build passes** — vue-tsc + vite build clean
+- **VERIFICATION.md:** 16/16 must-haves verified (was 10/16)
 
 ### Phase 7: Agent System ✅ Complete
 
@@ -85,20 +85,22 @@
 
 ## Decisions Log
 
-| Decision           | Rationale                                            | Phase |
-| ------------------ | ---------------------------------------------------- | ----- |
-| pnpm workspaces    | Monorepo management with strict hoisting             | 1     |
-| @vue-flow/core     | Proven Vue 3 canvas library, no custom drag-drop     | 5     |
-| No UI library      | Hand-built components with design tokens per spec    | 5     |
-| TypeORM            | PostgreSQL ORM with entity decorators                | 4     |
-| Inline SVG         | No icon library dependency                           | 5     |
-| gray-matter        | Robust YAML frontmatter parsing for agent templates  | 7     |
-| ESM modules        | Native ESM support with .js extension imports        | 7     |
-| Whitelist security | Tool command execution blocks dangerous patterns     | 7     |
-| Embedded templates | Template strings in builtin.ts for TypeScript build  | 7     |
-| RouterInterface    | Placeholder interface to defer llm-router dependency | 7     |
-| LLMCallFunction    | Decouple AgentExecutor from router implementation    | 7     |
-| ToolExecutor       | Dynamic tool execution at runtime in ToolRegistry    | 7     |
+| Decision                                                       | Rationale                                            | Phase |
+| -------------------------------------------------------------- | ---------------------------------------------------- | ----- |
+| pnpm workspaces                                                | Monorepo management with strict hoisting             | 1     |
+| @vue-flow/core                                                 | Proven Vue 3 canvas library, no custom drag-drop     | 5     |
+| No UI library                                                  | Hand-built components with design tokens per spec    | 5     |
+| TypeORM                                                        | PostgreSQL ORM with entity decorators                | 4     |
+| Inline SVG                                                     | No icon library dependency                           | 5     |
+| gray-matter                                                    | Robust YAML frontmatter parsing for agent templates  | 7     |
+| ESM modules                                                    | Native ESM support with .js extension imports        | 7     |
+| Whitelist security                                             | Tool command execution blocks dangerous patterns     | 7     |
+| Embedded templates                                             | Template strings in builtin.ts for TypeScript build  | 7     |
+| RouterInterface                                                | Placeholder interface to defer llm-router dependency | 7     |
+| LLMCallFunction                                                | Decouple AgentExecutor from router implementation    | 7     |
+| ToolExecutor                                                   | Dynamic tool execution at runtime in ToolRegistry    | 7     |
+| Explicit Record types for Badge color mapping (TS strict mode) | 5-06                                                 |
+| Vue Flow edge template with BezierEdge + EdgeLabel overlay     | 5-06                                                 |
 
 ## Blockers
 
