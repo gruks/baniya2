@@ -9,20 +9,37 @@
       <form @submit.prevent="handleLogin" class="auth-form">
         <div class="form-group">
           <label class="form-label">Email</label>
-          <input v-model="email" type="email" required placeholder="you@company.com" />
+          <input
+            v-model="email"
+            type="email"
+            required
+            placeholder="you@company.com"
+            :disabled="auth.loading"
+          />
         </div>
         <div class="form-group">
           <label class="form-label">Password</label>
-          <input v-model="password" type="password" required placeholder="••••••••" />
+          <input
+            v-model="password"
+            type="password"
+            required
+            placeholder="••••••••"
+            :disabled="auth.loading"
+          />
         </div>
         <p v-if="error" class="auth-error">{{ error }}</p>
-        <button type="submit" class="btn btn-primary auth-btn" :disabled="loading">
-          <span v-if="loading" class="spinner"></span>
-          {{ loading ? 'Signing in...' : 'Sign In' }}
+        <button
+          type="submit"
+          class="btn btn-primary auth-btn"
+          :disabled="auth.loading"
+        >
+          <span v-if="auth.loading" class="spinner"></span>
+          {{ auth.loading ? 'Signing in...' : 'Sign In' }}
         </button>
       </form>
       <p class="auth-footer">
-        Don't have an account? <router-link to="/register">Register</router-link>
+        Don't have an account?
+        <router-link to="/register">Register</router-link>
       </p>
     </div>
   </div>
@@ -39,18 +56,22 @@ const router = useRouter();
 const email = ref('');
 const password = ref('');
 const error = ref('');
-const loading = ref(false);
 
 async function handleLogin() {
   error.value = '';
-  loading.value = true;
   try {
     await auth.login(email.value, password.value);
     router.push('/workflows');
   } catch (err: any) {
-    error.value = err.response?.data?.error || 'Login failed';
-  } finally {
-    loading.value = false;
+    const status = err.response?.status;
+    const message = err.response?.data?.error;
+    if (status === 401) {
+      error.value = 'Invalid email or password';
+    } else if (message) {
+      error.value = message;
+    } else {
+      error.value = 'Login failed. Please try again.';
+    }
   }
 }
 </script>
@@ -99,9 +120,29 @@ async function handleLogin() {
   margin-bottom: 24px;
   font-size: 13px;
 }
-.auth-form { display: flex; flex-direction: column; }
-.auth-form input { width: 100%; }
-.auth-btn { width: 100%; justify-content: center; padding: 10px; font-size: 14px; margin-top: 8px; }
-.auth-error { color: var(--color-error); font-size: 13px; margin-bottom: 8px; }
-.auth-footer { text-align: center; margin-top: 16px; font-size: 13px; color: var(--color-text-secondary); }
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+.auth-form input {
+  width: 100%;
+}
+.auth-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 10px;
+  font-size: 14px;
+  margin-top: 8px;
+}
+.auth-error {
+  color: var(--color-error);
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.auth-footer {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
 </style>
