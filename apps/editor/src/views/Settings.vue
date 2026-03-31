@@ -73,6 +73,26 @@
         </div>
 
         <div class="settings-section card">
+          <h3>Local LLM (LM Studio)</h3>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">LM Studio Status</div>
+              <div class="setting-desc">
+                OpenAI-compatible API server at localhost:1234
+              </div>
+            </div>
+            <span
+              :class="[
+                'badge',
+                lmstudioConnected ? 'badge-success' : 'badge-muted',
+              ]"
+            >
+              {{ lmstudioConnected ? 'Running' : 'Offline' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="settings-section card">
           <h3>Cloud LLM API Keys</h3>
           <div class="setting-row column">
             <div class="setting-label">OpenAI API Key</div>
@@ -105,14 +125,39 @@
             <div class="setting-hint">Used for Gemini models</div>
           </div>
           <div class="setting-row">
-            <span
-              :class="[
-                'badge',
-                hasAnyCloudKey ? 'badge-success' : 'badge-muted',
-              ]"
-            >
-              {{ hasAnyCloudKey ? 'Configured' : 'Not configured' }}
-            </span>
+            <div class="provider-status">
+              <span>OpenAI</span>
+              <span
+                :class="[
+                  'badge',
+                  openaiConfigured ? 'badge-success' : 'badge-muted',
+                ]"
+              >
+                {{ openaiConfigured ? 'Configured' : 'Missing' }}
+              </span>
+            </div>
+            <div class="provider-status">
+              <span>Anthropic</span>
+              <span
+                :class="[
+                  'badge',
+                  anthropicConfigured ? 'badge-success' : 'badge-muted',
+                ]"
+              >
+                {{ anthropicConfigured ? 'Configured' : 'Missing' }}
+              </span>
+            </div>
+            <div class="provider-status">
+              <span>Google</span>
+              <span
+                :class="[
+                  'badge',
+                  googleConfigured ? 'badge-success' : 'badge-muted',
+                ]"
+              >
+                {{ googleConfigured ? 'Configured' : 'Missing' }}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -201,6 +246,16 @@ const form = ref({
 });
 
 const ollamaConnected = computed(() => providers.status.ollama);
+const lmstudioConnected = computed(() => providers.status.lmstudio);
+const openaiConfigured = computed(
+  () => form.value.openaiApiKey || providers.status.openai
+);
+const anthropicConfigured = computed(
+  () => form.value.anthropicApiKey || providers.status.anthropic
+);
+const googleConfigured = computed(
+  () => form.value.googleApiKey || providers.status.gemini
+);
 const hasAnyCloudKey = computed(
   () =>
     form.value.openaiApiKey ||
@@ -327,6 +382,13 @@ function logout() {
 .setting-hint {
   font-size: 11px;
   color: var(--color-text-muted);
+}
+.provider-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 4px 0;
 }
 .input {
   padding: 6px 10px;
