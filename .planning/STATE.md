@@ -15,9 +15,9 @@
 ## Current Position
 
 - **Active Phase:** 7 — Agent System
-- **Active Plan:** 07-01 — Agent template system
-- **Current Plan:** 1/1
-- **Phase Progress:** Agent template system complete
+- **Active Plan:** 07-02 — Tool registry with file/command tools
+- **Current Plan:** 2/4
+- **Phase Progress:** Tool registry complete
 
 ## What's Done
 
@@ -73,19 +73,21 @@
 - Zod-based template validation with comprehensive checks
 - AgentStorage with in-memory CRUD and file-based persistence
 - Markdown parser with YAML frontmatter support
+- **DONE:** Tool registry with file/command tools and security sandbox
 - **NEXT:** Build agent nodes for workflow engine
 
 ## Decisions Log
 
-| Decision        | Rationale                                           | Phase |
-| --------------- | --------------------------------------------------- | ----- |
-| pnpm workspaces | Monorepo management with strict hoisting            | 1     |
-| @vue-flow/core  | Proven Vue 3 canvas library, no custom drag-drop    | 5     |
-| No UI library   | Hand-built components with design tokens per spec   | 5     |
-| TypeORM         | PostgreSQL ORM with entity decorators               | 4     |
-| Inline SVG      | No icon library dependency                          | 5     |
-| gray-matter     | Robust YAML frontmatter parsing for agent templates | 7     |
-| ESM modules     | Native ESM support with .js extension imports       | 7     |
+| Decision           | Rationale                                           | Phase |
+| ------------------ | --------------------------------------------------- | ----- |
+| pnpm workspaces    | Monorepo management with strict hoisting            | 1     |
+| @vue-flow/core     | Proven Vue 3 canvas library, no custom drag-drop    | 5     |
+| No UI library      | Hand-built components with design tokens per spec   | 5     |
+| TypeORM            | PostgreSQL ORM with entity decorators               | 4     |
+| Inline SVG         | No icon library dependency                          | 5     |
+| gray-matter        | Robust YAML frontmatter parsing for agent templates | 7     |
+| ESM modules        | Native ESM support with .js extension imports       | 7     |
+| Whitelist security | Tool command execution blocks dangerous patterns    | 7     |
 
 ## Blockers
 
