@@ -7,13 +7,11 @@ export interface AuthRequest extends Request {
   user?: { id: string; email: string };
 }
 
-export function jwtMiddleware(req: AuthRequest, res: Response, next: NextFunction): void {
-  // Skip auth for auth routes
-  if (req.path.startsWith('/auth')) {
-    next();
-    return;
-  }
-
+export function jwtMiddleware(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+): void {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
     res.status(401).json({ error: 'Missing or invalid authorization header' });
@@ -22,7 +20,10 @@ export function jwtMiddleware(req: AuthRequest, res: Response, next: NextFunctio
 
   const token = authHeader.slice(7);
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; email: string };
+    const decoded = jwt.verify(token, JWT_SECRET) as {
+      id: string;
+      email: string;
+    };
     req.user = decoded;
     next();
   } catch {

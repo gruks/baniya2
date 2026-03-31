@@ -2,7 +2,7 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import { AppDataSource } from '../data-source';
 import { UserEntity } from '../entities/User';
-import { signToken, AuthRequest } from '../middleware/auth';
+import { signToken, AuthRequest, jwtMiddleware } from '../middleware/auth';
 import { validate } from '../middleware/validate';
 import { loginSchema, registerSchema } from '../validation/schemas';
 
@@ -61,7 +61,8 @@ router.post('/register', validate(registerSchema), async (req, res) => {
   }
 });
 
-router.get('/me', (req, res) => {
+// /me must be protected — apply jwtMiddleware directly to this route
+router.get('/me', jwtMiddleware, (req, res) => {
   const authReq = req as AuthRequest;
   if (!authReq.user) {
     res.status(401).json({ error: 'Not authenticated' });
