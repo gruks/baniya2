@@ -7,7 +7,7 @@ import { onMounted } from 'vue';
 
 // Apply dark mode on startup from persisted preference
 onMounted(() => {
-  if (localStorage.getItem('baniya-dark') === 'true') {
+  if (localStorage.getItem('baniya-dark-mode') === 'true') {
     document.documentElement.classList.add('dark');
   }
 });
