@@ -15,6 +15,7 @@ export type {
   AgentExecutionHistory,
   AgentExecutionResult,
   ToolResult,
+  ToolExecutor,
 } from './types.js';
 
 export {
@@ -40,6 +41,13 @@ export type { ParsedTemplate } from './parser.js';
 
 // Tool Registry
 export { ToolRegistry, defaultRegistry } from './registry.js';
+
+// Agent Executor
+export { AgentExecutor } from './executor.js';
+export type { AgentResult, AgentContext, LLMCallFunction } from './executor.js';
+
+// Agent Handlers
+export { executeAgentNode, chatAgentNode } from './handlers/agent-handlers.js';
 
 // Sandbox
 export {
@@ -80,6 +88,7 @@ import { fileTools } from './tools/file-tools.js';
 import { commandTools } from './tools/command-tools.js';
 import { ToolRegistry } from './registry.js';
 import type { ToolDefinition } from './types.js';
+import type { ToolExecutor } from './types.js';
 
 export function getDefaultTools(): ToolDefinition[] {
   return [...fileTools, ...commandTools];
@@ -92,6 +101,24 @@ export function createDefaultRegistry(): ToolRegistry {
   const registry = new ToolRegistry();
   for (const tool of getDefaultTools()) {
     registry.register(tool);
+  }
+  return registry;
+}
+
+/**
+ * Create a registry with tools and their executors
+ */
+export function createRegistryWithExecutors(
+  executors: Record<string, ToolExecutor>
+): ToolRegistry {
+  const registry = new ToolRegistry();
+  for (const tool of getDefaultTools()) {
+    const executor = executors[tool.name];
+    if (executor) {
+      registry.register(tool, executor);
+    } else {
+      registry.register(tool);
+    }
   }
   return registry;
 }

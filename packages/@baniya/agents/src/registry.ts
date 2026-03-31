@@ -4,20 +4,22 @@
  * Provides centralized tool registration and discovery for agents.
  */
 
-import type { ToolDefinition } from './types.js';
+import type { ToolDefinition, ToolExecutor } from './types.js';
 
 /**
  * ToolRegistry - Manages tool registration and discovery
  *
  * Tools are registered by name and can be retrieved, listed, or checked for existence.
+ * Each tool can have an optional executor function for execution.
  */
 export class ToolRegistry {
   private tools: Map<string, ToolDefinition> = new Map();
+  private executors: Map<string, ToolExecutor> = new Map();
 
   /**
    * Register a new tool
    */
-  register(tool: ToolDefinition): void {
+  register(tool: ToolDefinition, executor?: ToolExecutor): void {
     if (!tool.name) {
       throw new Error('Tool name is required');
     }
@@ -25,6 +27,9 @@ export class ToolRegistry {
       console.warn(`Tool "${tool.name}" is already registered, overwriting`);
     }
     this.tools.set(tool.name, tool);
+    if (executor) {
+      this.executors.set(tool.name, executor);
+    }
   }
 
   /**
@@ -32,6 +37,13 @@ export class ToolRegistry {
    */
   get(name: string): ToolDefinition | undefined {
     return this.tools.get(name);
+  }
+
+  /**
+   * Get the executor function for a tool
+   */
+  getExecutor(name: string): ToolExecutor | undefined {
+    return this.executors.get(name);
   }
 
   /**
@@ -60,6 +72,7 @@ export class ToolRegistry {
    */
   clear(): void {
     this.tools.clear();
+    this.executors.clear();
   }
 
   /**

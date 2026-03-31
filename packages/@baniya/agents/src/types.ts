@@ -133,3 +133,17 @@ export interface AgentExecutionResult {
   /** Execution history */
   history: AgentExecutionHistory[];
 }
+
+/**
+ * Result of a tool execution
+ */
+export interface ToolResult {
+  success: boolean;
+  error?: string;
+  output?: unknown;
+}
+
+/**
+ * Tool executor function type
+ */
+export type ToolExecutor = (input: Record<string, unknown>) => Promise<unknown>;

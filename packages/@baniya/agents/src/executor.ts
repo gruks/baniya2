@@ -7,30 +7,10 @@
 
 import type {
   AgentTemplate,
-  AgentExecutionResult,
   AgentExecutionHistory,
   ToolResult,
 } from './types.js';
 import type { ToolRegistry } from './registry.js';
-
-// TODO: Import from @baniya/llm-router when available
-// import type { BaniyaRouter } from '@baniya/llm-router';
-// import type { RouterConfig } from '@baniya/types';
-
-// Placeholder router interface for now
-interface RouterInterface {
-  route(
-    input: Record<string, unknown>,
-    prompt: string,
-    config?: unknown
-  ): Promise<{
-    text: string;
-    model: string;
-    tokensIn: number;
-    tokensOut: number;
-    costUSD: number;
-  }>;
-}
 
 /**
  * Result object returned by AgentExecutor
@@ -55,6 +35,17 @@ export interface AgentContext {
 }
 
 /**
+ * LLM call function interface
+ */
+export type LLMCallFunction = (
+  prompt: string,
+  systemPrompt?: string
+) => Promise<{
+  text: string;
+  model: string;
+}>;
+
+/**
  * Agent executor with ReAct loop implementation
  *
  * The ReAct loop:
@@ -65,11 +56,11 @@ export interface AgentContext {
  */
 export class AgentExecutor {
   private tools: ToolRegistry;
-  private router: RouterInterface;
+  private llmCall: LLMCallFunction;
 
-  constructor(tools: ToolRegistry, router: RouterInterface) {
+  constructor(tools: ToolRegistry, llmCall: LLMCallFunction) {
     this.tools = tools;
-    this.router = router;
+    this.llmCall = llmCall;
   }
 
   /**
@@ -121,11 +112,7 @@ export class AgentExecutor {
         state,
         template.instructions
       );
-      const thoughtResponse = await this.router.route(
-        state.input,
-        thoughtPrompt,
-        this.getRouterConfig(template)
-      );
+      const thoughtResponse = await this.llmCall(thoughtPrompt, systemPrompt);
 
       state.thought = this.extractThought(thoughtResponse.text);
       state.history.push(`Thought ${iterations}: ${state.thought}`);
