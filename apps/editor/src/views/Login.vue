@@ -27,7 +27,7 @@
             :disabled="auth.loading"
           />
         </div>
-        <p v-if="error" class="auth-error">{{ error }}</p>
+        <p v-if="auth.error" class="auth-error">{{ auth.error }}</p>
         <button
           type="submit"
           class="btn btn-primary auth-btn"
@@ -55,23 +55,13 @@ const router = useRouter();
 
 const email = ref('');
 const password = ref('');
-const error = ref('');
 
 async function handleLogin() {
-  error.value = '';
   try {
     await auth.login(email.value, password.value);
     router.push('/workflows');
-  } catch (err: any) {
-    const status = err.response?.status;
-    const message = err.response?.data?.error;
-    if (status === 401) {
-      error.value = 'Invalid email or password';
-    } else if (message) {
-      error.value = message;
-    } else {
-      error.value = 'Login failed. Please try again.';
-    }
+  } catch {
+    // Error already set by store
   }
 }
 </script>

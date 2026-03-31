@@ -38,7 +38,7 @@
             :disabled="auth.loading"
           />
         </div>
-        <p v-if="error" class="auth-error">{{ error }}</p>
+        <p v-if="auth.error" class="auth-error">{{ auth.error }}</p>
         <button
           type="submit"
           class="btn btn-primary auth-btn"
@@ -66,23 +66,13 @@ const router = useRouter();
 const name = ref('');
 const email = ref('');
 const password = ref('');
-const error = ref('');
 
 async function handleRegister() {
-  error.value = '';
   try {
     await auth.register(email.value, password.value, name.value);
     router.push('/workflows');
-  } catch (err: any) {
-    const status = err.response?.status;
-    const message = err.response?.data?.error;
-    if (status === 409) {
-      error.value = 'An account with this email already exists';
-    } else if (message) {
-      error.value = message;
-    } else {
-      error.value = 'Registration failed. Please try again.';
-    }
+  } catch {
+    // Error already set by store
   }
 }
 </script>
