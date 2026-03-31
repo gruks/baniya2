@@ -413,7 +413,7 @@ function emitChange() {
 
 .toggle-input:checked + .toggle-switch::after {
   transform: translateX(16px);
-  background: #fff;
+  background: var(--color-bg-primary);
 }
 
 .toggle-desc {
