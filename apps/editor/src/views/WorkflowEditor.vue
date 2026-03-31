@@ -38,6 +38,10 @@
             <Background pattern-color="rgba(0,0,0,0.05)" :gap="15" />
             <Controls />
             <MiniMap />
+            <template #edge-default="edgeProps">
+              <BaseEdge :id="edgeProps.id" :path="edgeProps.path" />
+              <EdgeLabel :label="edgeProps.sourceHandle || ''" />
+            </template>
           </VueFlow>
         </div>
 
@@ -207,7 +211,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, markRaw } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { VueFlow, useVueFlow } from '@vue-flow/core';
+import { VueFlow, useVueFlow, BaseEdge } from '@vue-flow/core';
 import { Background } from '@vue-flow/background';
 import { Controls } from '@vue-flow/controls';
 import { MiniMap } from '@vue-flow/minimap';
@@ -217,6 +221,7 @@ import '@vue-flow/controls/dist/style.css';
 import '@vue-flow/minimap/dist/style.css';
 import AppSidebar from '../components/shared/AppSidebar.vue';
 import BaniyaNode from '../components/canvas/BaniyaNode.vue';
+import EdgeLabel from '../components/canvas/EdgeLabel.vue';
 import NodePicker from '../components/canvas/NodePicker.vue';
 import NodeConfigPanel from '../components/canvas/NodeConfigPanel.vue';
 import Topbar from '../components/shared/Topbar.vue';
