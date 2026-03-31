@@ -21,7 +21,7 @@ Plans:
 | 2     | Intelligence       | ✅ Complete | 3     | 3         |
 | 3     | Engine             | ✅ Complete | 3     | 3         |
 | 4     | Server             | ✅ Complete | 5     | 5         |
-| 5     | Editor             | ⚠️ Partial  | 5     | 3         |
+| 5     | Editor             | ✅ Complete | 6     | 6         |
 | 6     | Dashboard & Polish | ⚠️ Partial  | 4     | 1         |
 | 7     | AI Agent System    | ✅ Complete | 4     | 4         |
 
@@ -49,13 +49,13 @@ Plans:
   - [x] 04-04: Zod validation on all routes + error handling hardening (2 gaps found)
   - [x] 04-05: Close validation gaps (webhooks.ts + filesystem.ts)
 
-- [ ] **Phase 5: Editor** — Vue 3 canvas frontend
+- [x] **Phase 5: Editor** — Vue 3 canvas frontend
   - [x] 05-01: Scaffold (Vite, Vue 3, Pinia, router, design tokens, AppSidebar)
   - [x] 05-02: WorkflowList + WorkflowEditor + BaniyaNode
   - [x] 05-03: API layer + stores + WebSocket composable
   - [x] 05-04: Missing components (NodePicker, NodeConfigPanel, EdgeLabel, MiniExecutionBadge, Topbar, Modal, Badge, Spinner, EmptyState)
   - [x] 05-05: Dashboard components (CostCard, SavingsCard, RoutingPie, AuditTable, ProviderStatus)
-  - [ ] 05-06: Gap closure — wire orphaned components (Badge, Modal, Spinner, EmptyState, EdgeLabel, MiniExecutionBadge)
+  - [x] 05-06: Gap closure — wire orphaned components (Badge, Modal, Spinner, EmptyState, EdgeLabel, MiniExecutionBadge)
 
 - [ ] **Phase 6: Dashboard & Polish** — Dashboard views + dark mode + demo
   - [x] 06-01: BaniyaDashboard view (exists but needs dashboard sub-components)
