@@ -15,9 +15,9 @@
 ## Current Position
 
 - **Active Phase:** 7 — Agent System
-- **Active Plan:** 07-04 — Agent templates and template loader
-- **Current Plan:** 4/4
-- **Phase Progress:** Templates complete, ready for agent nodes
+- **Active Plan:** 07-03 — Agent node types for workflow engine
+- **Current Plan:** 3/4
+- **Phase Progress:** Agent node types complete, ready for template editor
 
 ## What's Done
 
@@ -75,7 +75,8 @@
 - Markdown parser with YAML frontmatter support
 - **DONE:** Tool registry with file/command tools and security sandbox
 - **DONE:** Pre-built templates (researcher, planner, reviewer) with builtin loader
-- **NEXT:** Build agent nodes for workflow engine
+- **DONE:** Agent node types (agent.execute, agent.chat) with handlers in workflow engine
+- **NEXT:** Agent UI components and template editor
 
 ## Decisions Log
 
@@ -91,6 +92,8 @@
 | Whitelist security | Tool command execution blocks dangerous patterns     | 7     |
 | Embedded templates | Template strings in builtin.ts for TypeScript build  | 7     |
 | RouterInterface    | Placeholder interface to defer llm-router dependency | 7     |
+| LLMCallFunction    | Decouple AgentExecutor from router implementation    | 7     |
+| ToolExecutor       | Dynamic tool execution at runtime in ToolRegistry    | 7     |
 
 ## Blockers
 
