@@ -43,10 +43,27 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function login(email: string, password: string): Promise<void> {
-    const res = await authApi.login(email, password);
-    token.value = res.data.token;
-    user.value = res.data.user;
-    localStorage.setItem('baniya-token', res.data.token);
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await authApi.login(email, password);
+      token.value = res.data.token;
+      user.value = res.data.user;
+      localStorage.setItem('baniya-token', res.data.token);
+    } catch (err: any) {
+      const status = err.response?.status;
+      const message = err.response?.data?.error;
+      if (status === 401) {
+        error.value = 'Invalid email or password';
+      } else if (message) {
+        error.value = message;
+      } else {
+        error.value = 'Login failed. Please try again.';
+      }
+      throw err;
+    } finally {
+      loading.value = false;
+    }
   }
 
   async function register(
@@ -54,15 +71,33 @@ export const useAuthStore = defineStore('auth', () => {
     password: string,
     name: string
   ): Promise<void> {
-    const res = await authApi.register(email, password, name);
-    token.value = res.data.token;
-    user.value = res.data.user;
-    localStorage.setItem('baniya-token', res.data.token);
+    loading.value = true;
+    error.value = null;
+    try {
+      const res = await authApi.register(email, password, name);
+      token.value = res.data.token;
+      user.value = res.data.user;
+      localStorage.setItem('baniya-token', res.data.token);
+    } catch (err: any) {
+      const status = err.response?.status;
+      const message = err.response?.data?.error;
+      if (status === 409) {
+        error.value = 'An account with this email already exists';
+      } else if (message) {
+        error.value = message;
+      } else {
+        error.value = 'Registration failed. Please try again.';
+      }
+      throw err;
+    } finally {
+      loading.value = false;
+    }
   }
 
   function logout(): void {
     token.value = '';
     user.value = null;
+    error.value = null;
     localStorage.removeItem('baniya-token');
   }
 
