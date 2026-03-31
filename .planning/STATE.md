@@ -3,27 +3,33 @@
 ## Status: Active Development
 
 ## Phase Status
+
 - Phase 1: Foundation - Completed (All verification gaps closed)
 - Phase 2: Intelligence - Planning Complete
 - Phase 3: Engine - Planning Complete
 - Phase 4: Server - Complete
 - Phase 5: Editor - Complete
 - Phase 6: Dashboard + Polish - Partially Complete
+- Phase 7: Agent System - In Progress
 
 ## Current Position
 
-- **Active Phase:** 6 — Dashboard & Polish
-- **Active Plan:** 06-02 — ExecutionDetail polish + Settings dark mode
+- **Active Phase:** 7 — Agent System
+- **Active Plan:** 07-01 — Agent template system
+- **Current Plan:** 1/1
+- **Phase Progress:** Agent template system complete
 
 ## What's Done
 
 ### Phase 1: Foundation ✅
+
 - Monorepo scaffolded with pnpm workspaces
 - `@baniya/types` — all shared interfaces (SensitivityLevel, RoutingTarget, NodeType, Workflow, etc.)
 - tsconfig.base.json with strict mode
 - Build passes across all packages
 
 ### Phase 2: Intelligence ✅
+
 - `@baniya/data-classifier` — PII pattern detection (Aadhaar, PAN, IFSC, phone, email, etc.)
 - Sensitivity mapping (public → internal → private → critical)
 - `@baniya/llm-router` — BaniyaRouter with local/hybrid/cloud routing
@@ -32,12 +38,14 @@
 - Provider adapters for Ollama, LM Studio, OpenAI, Anthropic, Gemini
 
 ### Phase 3: Engine ✅
+
 - `@baniya/workflow-engine` — DAG execution with topological sort (Kahn's)
 - All 20 node type handlers implemented
 - `@baniya/nodes` — full registry with metadata, config schemas, icons
 - `@baniya/audit-logger` — TypeORM entity, write + query methods
 
 ### Phase 4: Server ⚠️ Mostly Complete
+
 - Express server with TypeORM, JWT middleware
 - User, Workflow, Execution entities
 - Routes: auth, workflows, executions, baniya, webhooks
@@ -46,6 +54,7 @@
 - **MISSING:** Zod validation on route inputs
 
 ### Phase 5: Editor ⚠️ Partially Complete
+
 - Vue 3 + Vite scaffold with Pinia + Vue Router
 - Design tokens (CSS custom properties, dark mode variables)
 - AppSidebar component
@@ -57,22 +66,26 @@
 - **MISSING:** NodePicker, NodeConfigPanel, EdgeLabel, MiniExecutionBadge, Topbar, Modal, Badge, Spinner, EmptyState
 - **MISSING:** Dashboard sub-components (CostCard, SavingsCard, RoutingPie, AuditTable, ProviderStatus)
 
-### Phase 6: Dashboard & Polish ⚠️ Early
-- BaniyaDashboard view exists (needs sub-components)
-- **MISSING:** ExecutionDetail polish
-- **MISSING:** Dark mode toggle in Settings
-- **MISSING:** Demo workflow seed verification
-- **MISSING:** End-to-end test
+### Phase 7: Agent System ⚙️ In Progress
+
+- @baniya/agents package created
+- AgentTemplate, ToolDefinition, AgentExecution types
+- Zod-based template validation with comprehensive checks
+- AgentStorage with in-memory CRUD and file-based persistence
+- Markdown parser with YAML frontmatter support
+- **NEXT:** Build agent nodes for workflow engine
 
 ## Decisions Log
 
-| Decision | Rationale | Phase |
-|----------|-----------|-------|
-| pnpm workspaces | Monorepo management with strict hoisting | 1 |
-| @vue-flow/core | Proven Vue 3 canvas library, no custom drag-drop | 5 |
-| No UI library | Hand-built components with design tokens per spec | 5 |
-| TypeORM | PostgreSQL ORM with entity decorators | 4 |
-| Inline SVG | No icon library dependency | 5 |
+| Decision        | Rationale                                           | Phase |
+| --------------- | --------------------------------------------------- | ----- |
+| pnpm workspaces | Monorepo management with strict hoisting            | 1     |
+| @vue-flow/core  | Proven Vue 3 canvas library, no custom drag-drop    | 5     |
+| No UI library   | Hand-built components with design tokens per spec   | 5     |
+| TypeORM         | PostgreSQL ORM with entity decorators               | 4     |
+| Inline SVG      | No icon library dependency                          | 5     |
+| gray-matter     | Robust YAML frontmatter parsing for agent templates | 7     |
+| ESM modules     | Native ESM support with .js extension imports       | 7     |
 
 ## Blockers
 
@@ -80,9 +93,11 @@ None currently.
 
 ## Next Steps
 
-1. Complete Phase 4 (Zod validation)
-2. Fill Phase 5 gaps (missing components)
-3. Build Phase 6 (dashboard sub-components, polish, demo)
+1. Build Phase 7 agent nodes for workflow engine
+2. Create built-in tools (file operations, command execution, search)
+3. Implement agent execution engine
+4. Add agent UI components (template editor, template library)
 
 ---
-*Last updated: 2026-03-29*
+
+_Last updated: 2026-03-31_
