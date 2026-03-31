@@ -84,3 +84,60 @@ export const executionQuerySchema = z.object({
   page: z.coerce.number().min(1).optional(),
   limit: z.coerce.number().min(1).max(100).optional(),
 });
+
+// Webhook schemas
+export const webhookTriggerSchema = z.object({
+  workflowId: z.string().uuid(),
+  nodeId: z.string().min(1),
+});
+
+// Filesystem schemas
+export const filesystemWriteSchema = z.object({
+  root: z.string().optional(),
+  path: z.string().min(1),
+  content: z.string().optional(),
+  createDirs: z.boolean().optional(),
+});
+
+export const filesystemPatchSchema = z.object({
+  root: z.string().optional(),
+  path: z.string().min(1),
+  oldStr: z.string().min(1),
+  newStr: z.string(),
+});
+
+export const filesystemAppendSchema = z.object({
+  root: z.string().optional(),
+  path: z.string().min(1),
+  content: z.string().optional(),
+});
+
+export const filesystemRenameSchema = z.object({
+  root: z.string().optional(),
+  from: z.string().min(1),
+  to: z.string().min(1),
+});
+
+export const filesystemMkdirSchema = z.object({
+  root: z.string().optional(),
+  path: z.string().min(1),
+});
+
+export const filesystemExecSchema = z.object({
+  root: z.string().optional(),
+  command: z.string().min(1),
+  timeout: z.number().optional(),
+});
+
+// Query schemas for filesystem GET routes
+export const filesystemQuerySchema = z.object({
+  root: z.string().optional(),
+  path: z.string().optional(),
+  q: z.string().optional(),
+  limit: z.coerce.number().optional(),
+});
+
+export const filesystemDeleteSchema = z.object({
+  root: z.string().optional(),
+  path: z.string().min(1),
+});
