@@ -53,7 +53,7 @@
 - Seed data for demo workflow
 - **Zod validation on ALL API routes**
 
-### Phase 5: Editor ⚠️ Partially Complete
+### Phase 5: Editor ✅ 05-04 Complete
 
 - Vue 3 + Vite scaffold with Pinia + Vue Router
 - Design tokens (CSS custom properties, dark mode variables)
@@ -63,7 +63,12 @@
 - API client layer (auth, baniya, executions, workflows)
 - Stores (auth, providers, workflows)
 - WebSocket composable
-- **MISSING:** NodePicker, NodeConfigPanel, EdgeLabel, MiniExecutionBadge, Topbar, Modal, Badge, Spinner, EmptyState
+- **NodePicker** — Left sidebar (280px), search, drag-to-add, all node types from @baniya/nodes
+- **NodeConfigPanel** — Right panel (320px), dynamic field rendering (text/textarea/number/boolean/select/code/expression)
+- **Shared components** — Topbar, Modal, Badge, Spinner, EmptyState
+- **Canvas components** — EdgeLabel, MiniExecutionBadge
+- **WorkflowEditor** — Three-panel layout fully integrated with all components
+- **Build passes** — vue-tsc + vite build clean after fixing TS errors and missing deps
 - **MISSING:** Dashboard sub-components (CostCard, SavingsCard, RoutingPie, AuditTable, ProviderStatus)
 
 ### Phase 7: Agent System ✅ Complete
